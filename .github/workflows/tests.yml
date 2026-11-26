@@ -1,3 +1,4 @@
+
 name: tests
 
 on:
@@ -5,6 +6,7 @@ on:
     branches:
       - main
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -15,24 +17,57 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           persist-credentials: false
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962
         with:
-          php-version: '8.3'
+          php-version: '8.4'
           tools: composer:v2
+          extensions: mbstring, dom, curl, sqlite3, pdo_sqlite
           coverage: none
 
       - name: Setup Node
-        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
         with:
-          node-version: '22'
+          node-version: '24'
+          cache: npm
 
-      - name: Setup Application
-        run: composer setup
+      - name: Install PHP dependencies
+        run: composer install --no-interaction --prefer-dist
 
-      - name: Run CI Checks
-        run: composer ci:check
+      - name: Prepare application
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+          touch database/database.sqlite
+          php artisan migrate --force
+        env:
+          DB_CONNECTION: sqlite
+          DB_DATABASE: database/database.sqlite
+
+      - name: Install JavaScript dependencies
+        run: npm ci
+
+      - name: Generate Wayfinder routes
+        run: php artisan wayfinder:generate
+
+      - name: Build frontend
+        run: npm run build
+
+      - name: Run PHP tests
+        run: php artisan test
+
+      - name: Check TypeScript
+        run: npm run types:check
+
+      - name: Check PHP formatting
+        run: vendor/bin/pint --test
+
+      - name: Check frontend quality
+        run: npm run check
+
+      - name: Static PHP analysis
+        run: composer types:check
