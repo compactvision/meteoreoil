@@ -1,3 +1,4 @@
+import { PageLink } from './page-link';
 import { ChevronDown } from 'lucide-react';
 import { filters, products } from './catalog';
 
@@ -21,9 +22,13 @@ export function Hero() {
                             Lubrifiants haute performance
                         </p>
                         <h1 id="hero-title">
-                            La performance
+                            <span className="hero-title-line">
+                                La performance
+                            </span>
                             <br />
-                            <span>face à la chaleur.</span>
+                            <span className="hero-title-line">
+                                face à la chaleur.
+                            </span>
                         </h1>
                         <p className="hero-description">
                             Des lubrifiants et fluides conçus pour protéger vos
@@ -31,15 +36,18 @@ export function Hero() {
                             climats extrêmes.
                         </p>
                         <div className="hero-links">
-                            <a className="button hero-primary" href="/produits">
+                            <PageLink
+                                className="button hero-primary"
+                                href="/produits"
+                            >
                                 Explorer la gamme
-                            </a>
-                            <a
+                            </PageLink>
+                            <PageLink
                                 className="button hero-secondary"
                                 href="/presentation"
                             >
                                 Découvrir MÉTÉORE
-                            </a>
+                            </PageLink>
                         </div>
                     </div>
                     <a
@@ -52,16 +60,16 @@ export function Hero() {
                 </div>
             </section>
             <div className="hero-facts">
-                <div className="site-width hero-facts-grid">
-                    <div>
+                <div className="site-width hero-facts-grid" data-reveal-group>
+                    <div data-reveal="rise">
                         <strong>{products.length}</strong>
                         <span>Références de lubrifiants et fluides</span>
                     </div>
-                    <div>
+                    <div data-reveal="rise">
                         <strong>{filters.length - 1}</strong>
                         <span>Familles de produits</span>
                     </div>
-                    <div>
+                    <div data-reveal="rise">
                         <strong>Kinshasa · Paris</strong>
                         <span>Hubs logistiques</span>
                     </div>

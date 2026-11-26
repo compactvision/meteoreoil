@@ -37,6 +37,7 @@
 }
 .hero-visual::after {
     position: absolute;
+    z-index: 2;
     inset: 0;
     background:
         linear-gradient(
@@ -57,7 +58,6 @@
     height: 100%;
     object-fit: cover;
     object-position: 61% 51%;
-    animation: hero-image-in 1.8s var(--ease-out) both;
 }
 .hero-layout {
     position: relative;
@@ -92,8 +92,8 @@
     line-height: 0.99;
     letter-spacing: -0.055em;
 }
-.brand-hero h1 span {
-    color: #ffffff;
+.hero-title-line {
+    display: inline-block;
 }
 .hero-description {
     max-width: 455px;
@@ -161,22 +161,6 @@
 .hero-scroll:hover {
     background: #ffffff1c;
 }
-.hero-scroll svg {
-    animation: hero-scroll-cue 1.25s ease-in-out 1.5s 2;
-}
-.hero-copy > * {
-    animation: hero-copy-in 0.75s var(--ease-out) both;
-}
-.hero-copy h1 {
-    animation-delay: 0.1s;
-}
-.hero-copy .hero-description {
-    animation-delay: 0.22s;
-}
-.hero-copy .hero-links {
-    animation-delay: 0.31s;
-}
-
 .hero-facts {
     background: var(--stone);
     color: var(--brand-navy);
@@ -815,13 +799,103 @@
     }
 }
 
-@keyframes hero-copy-in {
+@media (prefers-reduced-motion: no-preference) {
+    .hero-image {
+        animation: hero-turbo-in 1.45s var(--ease-out) backwards;
+    }
+    .hero-visual::before {
+        position: absolute;
+        z-index: 1;
+        inset: 0;
+        background: linear-gradient(
+            107deg,
+            transparent 39%,
+            #e306131a 47%,
+            #ff6b6440 50%,
+            #e3061317 53%,
+            transparent 61%
+        );
+        animation: hero-light-sweep 1.3s var(--ease-out) both;
+        pointer-events: none;
+        content: '';
+    }
+    .hero-kicker {
+        animation: hero-detail-in 540ms var(--ease-out) 40ms backwards;
+    }
+    .hero-kicker::before {
+        transform-origin: left;
+        animation: hero-kicker-line 690ms var(--ease-out) 80ms backwards;
+    }
+    .hero-title-line {
+        animation: hero-title-in 800ms var(--ease-out) 110ms backwards;
+    }
+    .hero-title-line:last-child {
+        animation-delay: 240ms;
+    }
+    .hero-description {
+        animation: hero-detail-in 620ms var(--ease-out) 340ms backwards;
+    }
+    .hero-links .button,
+    .hero-scroll {
+        animation: hero-detail-in 610ms var(--ease-out) 430ms backwards;
+    }
+    .hero-links .hero-secondary {
+        animation-delay: 510ms;
+    }
+    .hero-scroll {
+        animation-delay: 590ms;
+    }
+    .hero-links .button:focus-visible,
+    .hero-scroll:focus-visible {
+        opacity: 1 !important;
+        translate: none !important;
+    }
+    .hero-scroll svg {
+        animation: hero-scroll-cue 1.25s ease-in-out 1.35s 2;
+    }
+}
+
+@keyframes hero-turbo-in {
     from {
-        opacity: 0.58;
-        transform: translateY(18px);
+        opacity: 0.25;
+        transform: scale(1.16);
+    }
+}
+
+@keyframes hero-light-sweep {
+    from {
+        opacity: 0;
+        translate: -29% 0;
+    }
+    24% {
+        opacity: 1;
     }
     to {
-        opacity: 1;
-        transform: translateY(0);
+        opacity: 0;
+        translate: 65% 0;
+    }
+}
+
+@keyframes hero-kicker-line {
+    from {
+        scale: 0 1;
+    }
+}
+
+@keyframes hero-title-in {
+    from {
+        opacity: 0;
+        clip-path: inset(100% -0.12em -0.13em);
+        translate: 0 0.48em;
+    }
+    to {
+        clip-path: inset(-0.13em -0.12em);
+    }
+}
+
+@keyframes hero-detail-in {
+    from {
+        opacity: 0;
+        translate: 0 14px;
     }
 }

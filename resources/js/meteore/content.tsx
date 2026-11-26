@@ -18,6 +18,7 @@ import {
     Wrench,
 } from 'lucide-react';
 import type { ReactNode } from 'react';
+import { PageLink } from './page-link';
 import { Production } from './production';
 import { navigation, presentationLinks } from './navigation';
 
@@ -115,7 +116,7 @@ export function Footer() {
         <footer className="site-footer" id="contact">
             <div className="site-width">
                 <div className="footer-top">
-                    <div>
+                    <div data-reveal="rise">
                         <p className="eyebrow">Contact</p>
                         <h2>Parlons de vos moteurs.</h2>
                         <a
@@ -125,7 +126,7 @@ export function Footer() {
                             info@obcito-energies.com
                         </a>
                     </div>
-                    <div className="footer-marks">
+                    <div className="footer-marks" data-reveal="rise">
                         <div className="footer-mark footer-veritas">
                             <img
                                 src="/meteore/bureau-veritas.webp"
@@ -157,19 +158,19 @@ export function Footer() {
                     <nav aria-label="Menu de pied de page">
                         <p className="eyebrow">Menu</p>
                         {navigation.map(([href, label]) => (
-                            <a key={href} href={href}>
+                            <PageLink key={href} href={href}>
                                 {label}
-                            </a>
+                            </PageLink>
                         ))}
                     </nav>
                     <nav aria-label="Sommaire de présentation">
-                        <a className="eyebrow" href="/presentation">
+                        <PageLink className="eyebrow" href="/presentation">
                             Présentation
-                        </a>
+                        </PageLink>
                         {presentationLinks.map(([id, , label]) => (
-                            <a key={id} href={`/presentation#${id}`}>
+                            <PageLink key={id} href={`/presentation#${id}`}>
                                 {label}
-                            </a>
+                            </PageLink>
                         ))}
                     </nav>
                     <div className="footer-offices">
@@ -208,11 +209,11 @@ function Solutions() {
                     transporteur ou un particulier, MÉTÉORE a développé la
                     solution adaptée à vos exigences.
                 </p>
-                <div className="tile-grid three">
+                <div className="tile-grid three" data-reveal-group>
                     {solutions.map(([title, copy, label], index) => {
                         const Icon = icons[index];
                         return (
-                            <a
+                            <PageLink
                                 key={title}
                                 href="/produits#gamme"
                                 className="tile solution-tile"
@@ -233,7 +234,7 @@ function Solutions() {
                                 <span className="action-text">
                                     {label} <ArrowRight size={14} aria-hidden />
                                 </span>
-                            </a>
+                            </PageLink>
                         );
                     })}
                 </div>
@@ -251,7 +252,7 @@ function BenefitGrid({
 }) {
     const icons = [Flame, ShieldCheck, Timer, Earth, Fuel, BadgeCheck];
     return (
-        <div className="tile-grid three">
+        <div className="tile-grid three" data-reveal-group>
             {entries.map(([title, copy], index) => {
                 const Icon = icons[index + firstIcon];
                 return (
@@ -284,7 +285,7 @@ export function HomeSections({ catalog }: { catalog: ReactNode }) {
         <>
             <section className="section-band editorial-band" id="presentation">
                 <div className="site-width editorial-grid">
-                    <div className="editorial-photo" data-reveal="left">
+                    <div className="editorial-photo" data-reveal="media">
                         <img
                             src="/meteore/engineering.webp"
                             alt="Engrenages en acier et film de lubrifiant"
@@ -308,12 +309,12 @@ export function HomeSections({ catalog }: { catalog: ReactNode }) {
                             qui travaillent dans ces conditions.
                         </p>
                         <div className="editorial-actions">
-                            <a
+                            <PageLink
                                 className="button secondary"
                                 href="/presentation"
                             >
                                 Découvrir notre approche
-                            </a>
+                            </PageLink>
                             <a className="text-link" href="#conditionnement">
                                 Voir la ligne en vidéo
                             </a>
@@ -370,9 +371,9 @@ export function HomeSections({ catalog }: { catalog: ReactNode }) {
                                 </li>
                             ))}
                         </ul>
-                        <a className="button primary" href="/garantie">
+                        <PageLink className="button primary" href="/garantie">
                             Découvrir la garantie
-                        </a>
+                        </PageLink>
                     </div>
                 </div>
             </section>
@@ -394,12 +395,15 @@ export function NewsSection({ dedicated = false }: { dedicated?: boolean }) {
                         </h2>
                     </div>
                     {!dedicated && (
-                        <a className="button secondary" href="/actualites">
+                        <PageLink
+                            className="button secondary"
+                            href="/actualites"
+                        >
                             Toute l’actualité
-                        </a>
+                        </PageLink>
                     )}
                 </div>
-                <div className="news-grid">
+                <div className="news-grid" data-reveal-group>
                     {news.map(
                         ([date, title, copy, image, href, label], index) => (
                             <article
@@ -420,9 +424,9 @@ export function NewsSection({ dedicated = false }: { dedicated?: boolean }) {
                                 <p className="eyebrow">{date}</p>
                                 <h3>{title}</h3>
                                 <p>{copy}</p>
-                                <a className="action-text" href={href}>
+                                <PageLink className="action-text" href={href}>
                                     {label} <ArrowRight size={12} aria-hidden />
-                                </a>
+                                </PageLink>
                             </article>
                         ),
                     )}
@@ -444,9 +448,9 @@ function Offices({ action }: { action: string }) {
                     </article>
                 ))}
             </div>
-            <a className="button primary" href="/contact">
+            <PageLink className="button primary" href="/contact">
                 {action}
-            </a>
+            </PageLink>
         </>
     );
 }
@@ -553,7 +557,7 @@ export function Presentation() {
                         l’international. Chaque demande est étudiée selon la
                         destination, les volumes et le conditionnement souhaité.
                     </p>
-                    <figure className="delivery-map" data-reveal="right">
+                    <figure className="delivery-map" data-reveal="media">
                         <img
                             src="/meteore/carte-livraison.webp"
                             alt="Carte du monde illustrant la portée des livraisons MÉTÉORE"
@@ -678,7 +682,7 @@ export function AlloMoteur() {
             <section className="section-band mechanic-services">
                 <div className="site-width">
                     <h2>Ce que nous faisons pour vous</h2>
-                    <div className="tile-grid two">
+                    <div className="tile-grid two" data-reveal-group>
                         {services.map(([title, copy], index) => {
                             const Icon = serviceIcons[index];
                             return (
@@ -705,7 +709,7 @@ export function AlloMoteur() {
             <section className="section-band shaded mechanic-steps">
                 <div className="site-width">
                     <h2>Comment ça se passe</h2>
-                    <div className="tile-grid three">
+                    <div className="tile-grid three" data-reveal-group>
                         {steps.map(([title, copy], index) => (
                             <article
                                 className="tile"

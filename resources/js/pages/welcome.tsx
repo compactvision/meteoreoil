@@ -1,6 +1,7 @@
-import { Head } from '@inertiajs/react';
+import { PageLink } from '../meteore/page-link';
+import { Head, router } from '@inertiajs/react';
 import { ArrowRight, Plus } from 'lucide-react';
-import { useEffect, useState, type CSSProperties } from 'react';
+import { useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
 import { filters, products, type Product } from '../meteore/catalog';
 import {
     AlloMoteur,
@@ -19,6 +20,7 @@ import {
 } from '../meteore/pages';
 import { ProductImages } from '../meteore/product-images';
 import { Quote, useQuote } from '../meteore/quote';
+import { useScrollReveal } from '../meteore/scroll-reveal';
 
 const pageTitles = {
     home: 'MÉTÉORE Lubrifiants — Performance haute température | OBCITO Énergies',
@@ -66,7 +68,7 @@ function CatalogCard({
     onAdd: (product: Product) => void;
 }) {
     return (
-        <article className="product-card">
+        <article className="product-card" data-reveal="rise">
             <ProductImages product={product} />
             <div className="product-type">
                 <span className="eyebrow">{product.type}</span>
@@ -135,42 +137,16 @@ export default function Welcome({ page = 'home' }: { page?: Page }) {
             : (new URLSearchParams(window.location.search).get('q') ?? ''),
     );
     const quote = useQuote();
+    const site = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         const id = location.hash.slice(1);
-        if (id) document.getElementById(id)?.scrollIntoView();
-
-        if (
-            !('IntersectionObserver' in window) ||
-            matchMedia('(prefers-reduced-motion: reduce)').matches
-        )
-            return;
-
-        const elements = document.querySelectorAll('[data-reveal]');
-        const observer = new IntersectionObserver(
-            (entries) => {
-                for (const entry of entries) {
-                    entry.target.classList.toggle(
-                        'revealed',
-                        entry.isIntersecting,
-                    );
-                }
-            },
-            { threshold: 0 },
-        );
-
-        elements.forEach((element) => {
-            element.setAttribute('data-reveal-ready', '');
-            observer.observe(element);
-        });
-        return () => {
-            observer.disconnect();
-            elements.forEach((element) => {
-                element.removeAttribute('data-reveal-ready');
-                element.classList.remove('revealed');
-            });
-        };
-    }, []);
+        if (id)
+            document
+                .getElementById(id)
+                ?.scrollIntoView({ behavior: 'instant' });
+    }, [page]);
+    useScrollReveal(site, page);
 
     const search = normalize(query);
     const results = products.filter(
@@ -191,7 +167,7 @@ export default function Welcome({ page = 'home' }: { page?: Page }) {
 
     function handleSearch(value: string) {
         if (page !== 'produits') {
-            location.assign(`/produits?q=${encodeURIComponent(value)}#gamme`);
+            router.get(`/produits?q=${encodeURIComponent(value)}#gamme`);
             return;
         }
         setQuery(value);
@@ -282,7 +258,7 @@ export default function Welcome({ page = 'home' }: { page?: Page }) {
                     </p>
                 </div>
                 {results.length ? (
-                    <div className="product-grid">
+                    <div className="product-grid" data-reveal-group>
                         {visibleProducts.map((product) => (
                             <CatalogCard
                                 key={product.id}
@@ -314,8 +290,9 @@ export default function Welcome({ page = 'home' }: { page?: Page }) {
     );
 
     return (
-        <div className="premium-site">
+        <div className="premium-site" ref={site}>
             <Head title={pageTitles[page]} />
+            <div className="scroll-progress" aria-hidden="true" />
             <Header
                 currentPath={page === 'home' ? '/' : `/${page}`}
                 onSearch={handleSearch}
@@ -354,14 +331,17 @@ export default function Welcome({ page = 'home' }: { page?: Page }) {
                                     Un fluide pour chaque usage.
                                 </h2>
                             </div>
-                            <a className="text-link" href="/produits#gamme">
+                            <PageLink
+                                className="text-link"
+                                href="/produits#gamme"
+                            >
                                 Voir toute la gamme
-                            </a>
+                            </PageLink>
                         </div>
-                        <div className="category-grid">
+                        <div className="category-grid" data-reveal-group>
                             {categories.map(
                                 ({ image, title, detail }, index) => (
-                                    <a
+                                    <PageLink
                                         key={title}
                                         href={`/produits?famille=${index + 1}#gamme`}
                                         className="category"
@@ -389,7 +369,7 @@ export default function Welcome({ page = 'home' }: { page?: Page }) {
                                             size={17}
                                             aria-hidden
                                         />
-                                    </a>
+                                    </PageLink>
                                 ),
                             )}
                         </div>

@@ -1,3 +1,4 @@
+import { PageLink } from './page-link';
 import { ChevronDown, Search, X } from 'lucide-react';
 import {
     useEffect,
@@ -10,9 +11,9 @@ import { navigation, presentationLinks } from './navigation';
 
 const desktopLinks = navigation.filter(([href]) => href !== '/contact');
 
-function Brand({ onClick }: { onClick?: () => void }) {
+function Brand() {
     return (
-        <a className="brand" href="/" onClick={onClick}>
+        <PageLink className="brand" href="/">
             <img
                 src="/meteore/logo.png"
                 alt="Logo MÉTÉORE"
@@ -23,7 +24,7 @@ function Brand({ onClick }: { onClick?: () => void }) {
                 <strong>OBCITO Énergies</strong>
                 <span>Lubrifiants & fluides</span>
             </span>
-        </a>
+        </PageLink>
     );
 }
 
@@ -106,9 +107,10 @@ export function Header({
                                     }
                                 }}
                             >
-                                <a
+                                <PageLink
                                     className="nav-link"
                                     href={href}
+                                    prefetch
                                     aria-current={
                                         currentPath === href
                                             ? 'page'
@@ -116,7 +118,7 @@ export function Header({
                                     }
                                 >
                                     {label}
-                                </a>
+                                </PageLink>
                                 <button
                                     ref={presentationButton}
                                     type="button"
@@ -139,7 +141,7 @@ export function Header({
                                 >
                                     {presentationLinks.map(
                                         ([id, , section]) => (
-                                            <a
+                                            <PageLink
                                                 key={id}
                                                 href={`/presentation#${id}`}
                                                 onClick={() =>
@@ -147,22 +149,23 @@ export function Header({
                                                 }
                                             >
                                                 {section}
-                                            </a>
+                                            </PageLink>
                                         ),
                                     )}
                                 </div>
                             </div>
                         ) : (
-                            <a
+                            <PageLink
                                 className="nav-link"
                                 key={href}
                                 href={href}
+                                prefetch
                                 aria-current={
                                     currentPath === href ? 'page' : undefined
                                 }
                             >
                                 {label}
-                            </a>
+                            </PageLink>
                         ),
                     )}
                 </nav>
@@ -188,15 +191,16 @@ export function Header({
                             <Search size={19} aria-hidden />
                         )}
                     </button>
-                    <a
+                    <PageLink
                         className="button primary header-contact"
                         href="/contact"
+                        prefetch
                         aria-current={
                             currentPath === '/contact' ? 'page' : undefined
                         }
                     >
                         Contact
-                    </a>
+                    </PageLink>
                     <button
                         type="button"
                         className="icon-button mobile-toggle"
@@ -256,7 +260,7 @@ export function Header({
                 <div className="mobile-menu-layout">
                     <div className="mobile-menu-bar">
                         <div className="site-width header-row">
-                            <Brand onClick={closeMenu} />
+                            <Brand />
                             <button
                                 ref={closeMenuButton}
                                 type="button"
@@ -284,9 +288,8 @@ export function Header({
                                     }
                                 >
                                     <div className="mobile-menu-link-row">
-                                        <a
+                                        <PageLink
                                             href={href}
-                                            onClick={closeMenu}
                                             aria-current={
                                                 currentPath === href
                                                     ? 'page'
@@ -294,7 +297,7 @@ export function Header({
                                             }
                                         >
                                             {label}
-                                        </a>
+                                        </PageLink>
                                         {href === '/presentation' && (
                                             <button
                                                 className="mobile-submenu-toggle"
@@ -327,13 +330,18 @@ export function Header({
                                             <div>
                                                 {presentationLinks.map(
                                                     ([id, , section]) => (
-                                                        <a
+                                                        <PageLink
                                                             key={id}
                                                             href={`/presentation#${id}`}
-                                                            onClick={closeMenu}
+                                                            onClick={
+                                                                currentPath ===
+                                                                '/presentation'
+                                                                    ? closeMenu
+                                                                    : undefined
+                                                            }
                                                         >
                                                             {section}
-                                                        </a>
+                                                        </PageLink>
                                                     ),
                                                 )}
                                             </div>

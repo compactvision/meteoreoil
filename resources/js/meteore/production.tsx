@@ -6,7 +6,7 @@ export function Production() {
             aria-labelledby="production-title"
         >
             <div className="site-width production-layout">
-                <div className="production-intro" data-reveal>
+                <div className="production-intro" data-reveal="left">
                     <p className="eyebrow">En atelier</p>
                     <h2 id="production-title">
                         Sur la ligne de conditionnement.
@@ -16,7 +16,7 @@ export function Production() {
                         et fûts, découvrez les emballages de la gamme.
                     </p>
                 </div>
-                <figure className="production-film">
+                <figure className="production-film" data-reveal="media">
                     <div className="production-player">
                         <video
                             aria-label="Les bidons MÉTÉORE sur la ligne de conditionnement"
@@ -38,8 +38,8 @@ export function Production() {
                     </div>
                     <figcaption>La ligne en mouvement</figcaption>
                 </figure>
-                <div className="production-photos" data-reveal>
-                    <figure className="production-workshop">
+                <div className="production-photos" data-reveal-group>
+                    <figure className="production-workshop" data-reveal="media">
                         <img
                             src="/meteore/atelier.webp"
                             alt="Bidons MÉTÉORE alignés sur la table de la ligne de conditionnement"
@@ -49,7 +49,7 @@ export function Production() {
                         />
                         <figcaption>Les bidons en atelier</figcaption>
                     </figure>
-                    <figure className="production-barrel">
+                    <figure className="production-barrel" data-reveal="media">
                         <img
                             src="/meteore/fut-obcito.webp"
                             alt="Fût métallique gris portant le logo OBCITO Énergies"

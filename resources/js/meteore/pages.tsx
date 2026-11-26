@@ -1,3 +1,4 @@
+import { PageLink } from './page-link';
 import { Check, Mail, MapPin, Phone } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { NewsSection } from './content';
@@ -71,9 +72,9 @@ export function GuaranteePage() {
                 intro="Un forfait d’entretien tout compris auprès de nos garages agréés, avec une garantie de remplacement lorsque la panne est causée par nos lubrifiants."
                 image="/meteore/poids-lourds.jpg"
             >
-                <a className="button primary" href="/contact">
+                <PageLink className="button primary" href="/contact">
                     Contacter l’équipe
-                </a>
+                </PageLink>
                 <a className="button page-masthead-secondary" href="#forfait">
                     Voir le forfait
                 </a>
@@ -141,12 +142,12 @@ export function ContactPage() {
                 <a className="button primary" href={`mailto:${email}`}>
                     <Mail size={18} aria-hidden /> Nous écrire
                 </a>
-                <a
+                <PageLink
                     className="button page-masthead-secondary"
                     href="/allo-moteur"
                 >
                     Allo Moteur
-                </a>
+                </PageLink>
             </PageHero>
             <section className="section-band" id="coordonnees">
                 <div className="site-width">
