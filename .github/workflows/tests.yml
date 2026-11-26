@@ -71,3 +71,109 @@ jobs:
 
       - name: Static PHP analysis
         run: composer types:check
+
+  deploy:
+    name: Deploy to one.com
+    needs: ci
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    environment:
+      name: production
+      url: https://meteoreoil.com
+
+    concurrency:
+      group: meteoreoil-production
+      cancel-in-progress: false
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962
+        with:
+          php-version: '8.4'
+          tools: composer:v2
+          coverage: none
+
+      - name: Setup Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: '24'
+          cache: npm
+
+      - name: Install PHP dependencies
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Prepare build environment
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - name: Install JavaScript dependencies
+        run: npm ci
+
+      - name: Build frontend
+        run: |
+          php artisan wayfinder:generate
+          npm run build
+          test -f public/build/manifest.json
+
+      - name: Configure SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
+        run: |
+          install -m 700 -d ~/.ssh
+
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+
+          chmod 600 ~/.ssh/deploy_key ~/.ssh/known_hosts
+
+          cat > ~/.ssh/config <<EOF
+          Host production
+            HostName $SSH_HOST
+            User $SSH_USERNAME
+            Port $SSH_PORT
+            IdentityFile ~/.ssh/deploy_key
+            IdentitiesOnly yes
+            BatchMode yes
+            StrictHostKeyChecking yes
+          EOF
+
+          chmod 600 ~/.ssh/config
+
+      - name: Verify SSH connection
+        run: ssh production 'echo SSH_DEPLOY_OK'
+
+      - name: Prepare deployment package
+        run: |
+          mkdir -p /tmp/meteoreoil-release
+
+          git archive HEAD | tar -x -C /tmp/meteoreoil-release
+
+          mkdir -p /tmp/meteoreoil-release/public/build
+
+          cp -R public/build/. \
+            /tmp/meteoreoil-release/public/build/
+
+      - name: Upload release
+        run: |
+          ssh production \
+            "mkdir -p ~/deployments/meteoreoil/incoming/$GITHUB_SHA"
+
+          rsync -az \
+            /tmp/meteoreoil-release/ \
+            "production:deployments/meteoreoil/incoming/$GITHUB_SHA/"
+
+      - name: Deploy application
+        run: |
+          ssh production \
+            "bash ~/deployments/meteoreoil/incoming/$GITHUB_SHA/scripts/deploy.sh $GITHUB_SHA"
