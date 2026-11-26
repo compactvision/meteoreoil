@@ -17,22 +17,9 @@ import {
     Truck,
     Wrench,
 } from 'lucide-react';
-
-export const presentationLinks = [
-    ['la-marque', 'La Marque', 'La Marque'],
-    ['philosophie', 'Philosophie', 'Notre Philosophie'],
-    ['solutions', 'Gamme de solutions', 'Notre gamme de solutions'],
-    ['pourquoi', 'Pourquoi MÉTÉORE', 'Pourquoi choisir MÉTÉORE'],
-    ['livraison', 'Livraison', 'Où pouvons-nous livrer'],
-    ['entreprise', 'Notre entreprise', 'Notre entreprise'],
-];
-
-export const menu = [
-    ['/#actualites', 'Actualités'],
-    ['/#gamme', 'Produits MÉTÉORE'],
-    ['/allo-moteur', 'Allo Moteur'],
-    ['/#contact', 'Nous contacter'],
-];
+import type { ReactNode } from 'react';
+import { Production } from './production';
+import { navigation, presentationLinks } from './navigation';
 
 const benefits = [
     [
@@ -86,19 +73,25 @@ const news = [
         '16 novembre 2026',
         'La gamme MÉTÉORE arrive sur le marché',
         'Vingt références de lubrifiants moteur, hydrauliques, transmission et AdBlue, formulées pour les climats extrêmes et disponibles sous tous les conditionnements.',
-        '/meteore/range.png',
+        '/meteore/atelier.webp',
+        '/produits#gamme',
+        'Voir la gamme',
     ],
     [
         '2 novembre 2026',
         'PROTECT MOTEUR : le moteur assuré',
         'Le lubrifiant, deux filtres, la main-d’œuvre et le remplacement du moteur : une offre unique pour les flottes et les artisans.',
-        '/meteore/range.png',
+        '/meteore/engineering.webp',
+        '/garantie',
+        'Voir la garantie',
     ],
     [
         '12 octobre 2026',
         'Distribution en Afrique et en Europe',
         'OBCITO Énergies étend son réseau de distribution entre Kinshasa et Paris, avec livraison de 500 ml à 1000 L.',
         heavyVehiclesImage,
+        '/presentation#livraison',
+        'Zones de livraison',
     ],
 ];
 
@@ -122,20 +115,48 @@ export function Footer() {
         <footer className="site-footer" id="contact">
             <div className="site-width">
                 <div className="footer-top">
-                    <p>
-                        L’innovation et l’expertise pour des moteurs performants
-                    </p>
-                    <img
-                        src="/meteore/logo.png"
-                        alt="Logo MÉTÉORE"
-                        width="112"
-                        height="44"
-                    />
+                    <div>
+                        <p className="eyebrow">Contact</p>
+                        <h2>Parlons de vos moteurs.</h2>
+                        <a
+                            className="footer-email"
+                            href="mailto:info@obcito-energies.com"
+                        >
+                            info@obcito-energies.com
+                        </a>
+                    </div>
+                    <div className="footer-marks">
+                        <div className="footer-mark footer-veritas">
+                            <img
+                                src="/meteore/bureau-veritas.webp"
+                                alt="Bureau Veritas"
+                                width="471"
+                                height="588"
+                                loading="lazy"
+                            />
+                        </div>
+                        <div className="footer-brand">
+                            <div className="footer-mark">
+                                <img
+                                    src="/meteore/logo.png"
+                                    alt="Logo MÉTÉORE"
+                                    width="3188"
+                                    height="1262"
+                                    loading="lazy"
+                                />
+                            </div>
+                            <p>
+                                La marque de lubrifiants et fluides d’OBCITO
+                                Énergies, conçue pour les moteurs soumis aux
+                                climats extrêmes.
+                            </p>
+                        </div>
+                    </div>
                 </div>
                 <div className="footer-menu">
                     <nav aria-label="Menu de pied de page">
                         <p className="eyebrow">Menu</p>
-                        {menu.map(([href, label]) => (
+                        {navigation.map(([href, label]) => (
                             <a key={href} href={href}>
                                 {label}
                             </a>
@@ -151,10 +172,19 @@ export function Footer() {
                             </a>
                         ))}
                     </nav>
+                    <div className="footer-offices">
+                        {offices.map(([region, phone, href, address]) => (
+                            <div key={region}>
+                                <p className="eyebrow">{region}</p>
+                                <a href={`tel:${href}`}>{phone}</a>
+                                <p>{address}</p>
+                            </div>
+                        ))}
+                    </div>
                 </div>
                 <div className="footer-bottom">
                     <span>
-                        © 2024 MÉTÉORE Lubrifiants. Tous droits réservés.
+                        © 2023 MÉTÉORE Lubrifiants. Tous droits réservés.
                     </span>
                     <span>By OBCITO Énergies</span>
                 </div>
@@ -166,9 +196,12 @@ export function Footer() {
 function Solutions() {
     const icons = [Car, Truck, Factory];
     return (
-        <section id="solutions" className="section-band dark-band">
+        <section
+            id="solutions"
+            className="section-band dark-band solutions-section"
+        >
             <div className="site-width">
-                <p className="eyebrow">03 — Notre gamme de solutions</p>
+                <p className="eyebrow">Applications</p>
                 <h2>Une solution fluide pour chaque usage</h2>
                 <p className="section-intro">
                     Que vous soyez un professionnel de l’industrie, un
@@ -181,8 +214,9 @@ function Solutions() {
                         return (
                             <a
                                 key={title}
-                                href="/#gamme"
+                                href="/produits#gamme"
                                 className="tile solution-tile"
+                                data-reveal={index % 2 === 0 ? 'left' : 'right'}
                             >
                                 <div className="solution-marker">
                                     <Icon
@@ -221,7 +255,11 @@ function BenefitGrid({
             {entries.map(([title, copy], index) => {
                 const Icon = icons[index + firstIcon];
                 return (
-                    <article key={title} className="tile">
+                    <article
+                        key={title}
+                        className="tile"
+                        data-reveal={index % 2 === 0 ? 'left' : 'right'}
+                    >
                         <Icon size={28} strokeWidth={1.5} aria-hidden />
                         <h3>{title}</h3>
                         <p>{copy}</p>
@@ -241,54 +279,62 @@ function ThermalStatement() {
     );
 }
 
-export function HomeSections() {
+export function HomeSections({ catalog }: { catalog: ReactNode }) {
     return (
         <>
-            <section className="section-band" id="presentation">
-                <div className="site-width split brand-section">
-                    <div>
-                        <p className="eyebrow">La marque</p>
-                        <h2>MÉTÉORE Lubrifiants</h2>
-                        <a className="button secondary" href="#gamme">
-                            En savoir plus
-                        </a>
+            <section className="section-band editorial-band" id="presentation">
+                <div className="site-width editorial-grid">
+                    <div className="editorial-photo" data-reveal="left">
+                        <img
+                            src="/meteore/engineering.webp"
+                            alt="Engrenages en acier et film de lubrifiant"
+                            width="1448"
+                            height="1086"
+                            loading="lazy"
+                        />
                     </div>
-                    <div className="prose">
+                    <div className="editorial-copy" data-reveal="right">
+                        <p className="eyebrow accent">La marque MÉTÉORE</p>
+                        <h2>
+                            Conçus pour les
+                            <br />
+                            climats extrêmes.
+                        </h2>
                         <p>
-                            Le catalogue MÉTÉORE propose des lubrifiants sous
-                            différents conditionnements, mais également des
-                            liquides destinés à la maintenance, l’entretien et
-                            le nettoyage des véhicules : voitures avec
-                            différents types de carburants, camions et poids
-                            lourds de construction, tracteurs et machines
-                            agricoles, engins miniers. Profitez d’un catalogue
-                            complet de plus de{' '}
-                            <a href="#gamme">20 huiles moteur, lubrifiants</a>{' '}
-                            et fluides pour véhicules, conçus pour les climats
-                            extrêmes par OBCITO Énergies.
+                            La chaleur, la poussière et les charges prolongées
+                            mettent les moteurs à l’épreuve. OBCITO Énergies a
+                            développé la gamme MÉTÉORE pour les véhicules
+                            légers, les flottes et les équipements industriels
+                            qui travaillent dans ces conditions.
                         </p>
-                        <p>
-                            Nous ne fabriquons pas seulement des lubrifiants :
-                            nous concevons des boucliers thermiques. Notre
-                            politique de recherche et développement est
-                            entièrement tournée vers l’adaptation locale aux
-                            pays à fort taux d’ensoleillement et à chaleurs
-                            soutenues.
-                        </p>
+                        <div className="editorial-actions">
+                            <a
+                                className="button secondary"
+                                href="/presentation"
+                            >
+                                Découvrir notre approche
+                            </a>
+                            <a className="text-link" href="#conditionnement">
+                                Voir la ligne en vidéo
+                            </a>
+                        </div>
                     </div>
                 </div>
             </section>
-            <section className="section-band shaded" id="technique">
+            {catalog}
+            <Production />
+            <section
+                className="section-band shaded technical-section"
+                id="technique"
+            >
                 <div className="site-width">
-                    <p className="eyebrow">Infos techniques</p>
-                    <h2>
-                        Pourquoi choisir <em>MÉTÉORE</em> ?
-                    </h2>
+                    <div data-reveal>
+                        <p className="eyebrow accent">Expertise technique</p>
+                        <h2>Pourquoi choisir MÉTÉORE&nbsp;?</h2>
+                    </div>
                     <BenefitGrid entries={benefits} />
-                    <ThermalStatement />
                 </div>
             </section>
-            <Solutions />
             <section
                 id="garantie"
                 className="section-band shaded guarantee-section"
@@ -300,55 +346,68 @@ export function HomeSections() {
                     loading="lazy"
                 />
                 <div className="site-width guarantee">
-                    <p className="eyebrow">04 — Garantie casse moteur</p>
-                    <h2>
-                        MÉTÉORE <em>Protect Moteur</em>
-                    </h2>
-                    <p className="section-intro">
-                        La première offre de lubrification haute performance qui
-                        assure votre moteur. De la moto-taxi aux excavatrices
-                        minières, une protection fiable pour votre moteur et une
-                        sécurité pour votre emploi.
-                    </p>
-                    <ul>
-                        {[
-                            'Le lubrifiant MÉTÉORE',
-                            'Deux filtres',
-                            'La main-d’œuvre en garage agréé',
-                            'Remplacement du moteur en cas de panne causée par nos lubrifiants',
-                        ].map((item) => (
-                            <li key={item}>
-                                <Check size={17} aria-hidden />
-                                {item}
-                            </li>
-                        ))}
-                    </ul>
-                    <a className="button primary" href="#contact">
-                        Souscrire à la garantie
-                    </a>
-                </div>
-            </section>
-            <section className="section-band" id="actualites">
-                <div className="site-width">
-                    <div className="section-heading">
-                        <div>
-                            <p className="eyebrow">05 — Actualités</p>
-                            <h2>Nos actualités</h2>
-                        </div>
-                        <a className="button secondary" href="#contact">
-                            Nous écrire
+                    <div className="guarantee-copy" data-reveal="left">
+                        <p className="eyebrow">Garantie casse moteur</p>
+                        <h2>
+                            MÉTÉORE <em>Protect Moteur</em>
+                        </h2>
+                        <p className="section-intro">
+                            La première offre de lubrification haute performance
+                            qui assure votre moteur. De la moto-taxi aux
+                            excavatrices minières, une protection fiable pour
+                            votre moteur et une sécurité pour votre emploi.
+                        </p>
+                        <ul>
+                            {[
+                                'Le lubrifiant MÉTÉORE',
+                                'Deux filtres',
+                                'La main-d’œuvre en garage agréé',
+                                'Remplacement du moteur en cas de panne causée par nos lubrifiants',
+                            ].map((item) => (
+                                <li key={item}>
+                                    <Check size={17} aria-hidden />
+                                    {item}
+                                </li>
+                            ))}
+                        </ul>
+                        <a className="button primary" href="/garantie">
+                            Découvrir la garantie
                         </a>
                     </div>
-                    <div className="news-grid">
-                        {news.map(([date, title, copy, image]) => (
-                            <article key={title}>
+                </div>
+            </section>
+            <NewsSection />
+        </>
+    );
+}
+
+export function NewsSection({ dedicated = false }: { dedicated?: boolean }) {
+    return (
+        <section className="section-band news-section" id="actualites">
+            <div className="site-width">
+                <div className="section-heading" data-reveal>
+                    <div>
+                        <h2>
+                            {dedicated
+                                ? 'Les dernières nouvelles'
+                                : 'Nos actualités'}
+                        </h2>
+                    </div>
+                    {!dedicated && (
+                        <a className="button secondary" href="/actualites">
+                            Toute l’actualité
+                        </a>
+                    )}
+                </div>
+                <div className="news-grid">
+                    {news.map(
+                        ([date, title, copy, image, href, label], index) => (
+                            <article
+                                key={title}
+                                data-reveal={index % 2 === 0 ? 'left' : 'right'}
+                            >
                                 <div className="news-image">
                                     <img
-                                        className={
-                                            image === heavyVehiclesImage
-                                                ? 'news-photo'
-                                                : undefined
-                                        }
                                         src={image}
                                         alt={
                                             image === heavyVehiclesImage
@@ -361,16 +420,15 @@ export function HomeSections() {
                                 <p className="eyebrow">{date}</p>
                                 <h3>{title}</h3>
                                 <p>{copy}</p>
-                                <a className="action-text" href="#contact">
-                                    Lire la suite{' '}
-                                    <ArrowRight size={12} aria-hidden />
+                                <a className="action-text" href={href}>
+                                    {label} <ArrowRight size={12} aria-hidden />
                                 </a>
                             </article>
-                        ))}
-                    </div>
+                        ),
+                    )}
                 </div>
-            </section>
-        </>
+            </div>
+        </section>
     );
 }
 
@@ -386,7 +444,7 @@ function Offices({ action }: { action: string }) {
                     </article>
                 ))}
             </div>
-            <a className="button primary" href="/#contact">
+            <a className="button primary" href="/contact">
                 {action}
             </a>
         </>
@@ -421,10 +479,9 @@ export function Presentation() {
             </section>
             <section className="section-band" id="la-marque">
                 <div className="site-width">
-                    <p className="eyebrow">Section A</p>
-                    <h2>La Marque</h2>
+                    <h2 data-reveal="left">La Marque</h2>
                     <div className="split prose">
-                        <div>
+                        <div data-reveal="left">
                             <p>
                                 MÉTÉORE est une marque de lubrifiants de
                                 nouvelle génération, spécialement conçue et
@@ -440,7 +497,7 @@ export function Presentation() {
                                 puissance de vos moteurs.
                             </p>
                         </div>
-                        <div>
+                        <div data-reveal="right">
                             <p>
                                 MÉTÉORE met en place une politique de
                                 partenariat avec les clients institutionnels,
@@ -461,9 +518,10 @@ export function Presentation() {
             </section>
             <section className="section-band shaded" id="philosophie">
                 <div className="site-width">
-                    <p className="eyebrow">Section B</p>
-                    <h2>Notre Philosophie : L’Excellence Thermique</h2>
-                    <div className="prose">
+                    <h2 data-reveal="left">
+                        Notre philosophie : l’excellence thermique
+                    </h2>
+                    <div className="prose" data-reveal="right">
                         <p>
                             Chez MÉTÉORE, nous ne nous contentons pas de
                             fabriquer des lubrifiants : nous concevons des
@@ -482,44 +540,60 @@ export function Presentation() {
             <Solutions />
             <section className="section-band shaded" id="pourquoi">
                 <div className="site-width">
-                    <p className="eyebrow">Section D</p>
-                    <h2>Pourquoi choisir MÉTÉORE ?</h2>
+                    <h2 data-reveal="left">Pourquoi choisir MÉTÉORE ?</h2>
                     <BenefitGrid entries={benefits.slice(3)} firstIcon={3} />
                     <ThermalStatement />
                 </div>
             </section>
             <section className="section-band" id="livraison">
                 <div className="site-width">
-                    <p className="eyebrow">Section E</p>
-                    <h2>Où pouvons-nous livrer ?</h2>
+                    <h2 data-reveal="left">Où pouvons-nous livrer ?</h2>
                     <p className="section-intro">
                         Nos deux hubs logistiques couvrent la RD Congo et
                         l’international. Chaque demande est étudiée selon la
                         destination, les volumes et le conditionnement souhaité.
                     </p>
+                    <figure className="delivery-map" data-reveal="right">
+                        <img
+                            src="/meteore/carte-livraison.webp"
+                            alt="Carte du monde illustrant la portée des livraisons MÉTÉORE"
+                            width="1127"
+                            height="622"
+                            loading="lazy"
+                        />
+                    </figure>
                     <Offices action="Demander une livraison" />
                 </div>
             </section>
             <section className="section-band shaded" id="entreprise">
                 <div className="site-width">
-                    <p className="eyebrow">Section F</p>
-                    <h2>Notre entreprise</h2>
+                    <h2 data-reveal="left">Notre entreprise</h2>
                     <div className="split prose">
-                        <div>
+                        <div data-reveal="left">
                             <p>
-                                MÉTÉORE est la marque de lubrifiants d’OBCITO
-                                Énergies, négociant en produits pétroliers :
-                                distribution, transport et affrètement. Nos
-                                équipes accompagnent particuliers, transporteurs
-                                et industriels dans le choix et
-                                l’approvisionnement de leurs fluides.
+                                MÉTÉORE est la marque d’OBCITO Énergies. La
+                                société commercialise, stocke et distribue des
+                                produits pétroliers. Elle intervient aussi dans
+                                le négoce, le transport, l’affrètement,
+                                l’exploration, la production et la
+                                transformation des hydrocarbures.
                             </p>
                             <p>
-                                Qualité, fiabilité et efficacité : nos gammes
-                                sont certifiées ISO 9001 et ISO 14001.
+                                Présente à l’international, OBCITO Énergies
+                                développe son réseau de représentation en
+                                Afrique. Elle travaille avec les raffineurs, les
+                                compagnies maritimes, les institutions
+                                financières, les distributeurs et les
+                                utilisateurs finaux.
+                            </p>
+                            <p>
+                                Notre équipe formule, produit et commercialise
+                                des fluides automobiles adaptés aux exigences
+                                techniques des constructeurs. Nous conditionnons
+                                les produits MÉTÉORE de 500 ml à 1 000 L.
                             </p>
                         </div>
-                        <div>
+                        <div data-reveal="right">
                             <p className="eyebrow">Nous écrire</p>
                             <p>
                                 <a href="mailto:info@obcito-energies.com">
@@ -608,7 +682,13 @@ export function AlloMoteur() {
                         {services.map(([title, copy], index) => {
                             const Icon = serviceIcons[index];
                             return (
-                                <article className="tile" key={title}>
+                                <article
+                                    className="tile"
+                                    key={title}
+                                    data-reveal={
+                                        index % 2 === 0 ? 'left' : 'right'
+                                    }
+                                >
                                     <Icon
                                         size={28}
                                         strokeWidth={1.5}
@@ -627,7 +707,11 @@ export function AlloMoteur() {
                     <h2>Comment ça se passe</h2>
                     <div className="tile-grid three">
                         {steps.map(([title, copy], index) => (
-                            <article className="tile" key={title}>
+                            <article
+                                className="tile"
+                                key={title}
+                                data-reveal={index % 2 === 0 ? 'left' : 'right'}
+                            >
                                 <span className="solution-number">
                                     0{index + 1}
                                 </span>

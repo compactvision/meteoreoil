@@ -1,0 +1,285 @@
+.premium-site .product-gallery .product-photo {
+    border: 1px solid var(--line);
+    background: var(--paper);
+}
+.premium-site .product-gallery .product-photo img {
+    animation: product-photo-in 0.3s var(--ease-out) both;
+}
+.product-gallery-caption {
+    min-height: 34px;
+    padding-block: 8px 4px;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+}
+.product-thumbnails {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 7px;
+}
+.product-thumbnails button {
+    min-width: 0;
+    height: 57px;
+    overflow: hidden;
+    padding: 3px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    background: var(--paper);
+    transition:
+        border-color 0.2s,
+        box-shadow 0.2s;
+}
+.product-thumbnails button:hover {
+    border-color: var(--brand-blue);
+}
+.product-thumbnails button[aria-pressed='true'] {
+    border-color: var(--signal);
+    box-shadow: 0 0 0 1px var(--signal);
+}
+.product-thumbnails button img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+@keyframes product-photo-in {
+    from {
+        opacity: 0.45;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.editorial-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px 20px;
+}
+
+.premium-site .production-section {
+    position: relative;
+    overflow: hidden;
+    border-bottom: 5px solid var(--brand-rule);
+    background:
+        radial-gradient(ellipse at 96% 20%, #304677, transparent 65%),
+        var(--night);
+    color: #fff;
+}
+.production-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.38fr) minmax(260px, 0.9fr);
+    grid-template-areas: 'intro film' 'photos film';
+    align-items: center;
+    gap: 26px clamp(28px, 6vw, 90px);
+}
+.production-intro {
+    grid-area: intro;
+}
+.production-intro .eyebrow {
+    color: #dce5fc;
+}
+.production-intro .eyebrow::before {
+    display: inline-block;
+    width: 23px;
+    height: 2px;
+    margin-inline-end: 9px;
+    background: #ff666d;
+    vertical-align: middle;
+    content: '';
+}
+.production-intro > p:last-child {
+    max-width: 440px;
+    margin-top: 18px;
+    color: #dce5fc;
+    line-height: 1.7;
+}
+.production-film {
+    grid-area: film;
+    width: min(100%, 25rem);
+    justify-self: center;
+}
+.production-player {
+    padding: 8px;
+    border: 1px solid #b8c9f05c;
+    border-radius: 11px;
+    background: #0e162e;
+    box-shadow: 0 22px 50px #08102270;
+}
+.production-player video {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 368 / 448;
+    border-radius: 5px;
+    background: #0e162e;
+    object-fit: contain;
+}
+.production-photos {
+    display: grid;
+    grid-area: photos;
+    grid-template-columns: minmax(0, 2.25fr) minmax(0, 1fr);
+    gap: 12px;
+}
+.production-photos figure {
+    min-width: 0;
+}
+.production-photos img {
+    width: 100%;
+    height: clamp(120px, 14vw, 210px);
+    border-radius: 5px;
+    object-fit: cover;
+}
+.production-barrel img {
+    padding: 7px;
+    background: #fff;
+    object-fit: contain;
+}
+.production-layout figcaption {
+    margin-top: 8px;
+    color: #d0dcf7;
+    font-size: 12px;
+    line-height: 1.4;
+}
+.production-film figcaption {
+    text-align: center;
+}
+
+@media (max-width: 767px) {
+    .production-layout {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-areas: 'intro' 'film' 'photos';
+    }
+    .production-photos img {
+        height: clamp(118px, 32vw, 205px);
+    }
+}
+.premium-site .product-photo-opener {
+    width: 100%;
+    cursor: zoom-in;
+}
+.product-photo-expand {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    display: grid;
+    width: 39px;
+    height: 39px;
+    place-items: center;
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    background: var(--paper);
+    color: var(--brand-navy);
+    transition:
+        color 0.24s,
+        background 0.24s;
+}
+.product-photo-opener:is(:hover, :focus-visible) .product-photo-expand {
+    background: var(--brand-navy);
+    color: var(--paper);
+}
+
+.product-lightbox {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: max(12px, env(safe-area-inset-top))
+        max(16px, env(safe-area-inset-right))
+        max(12px, env(safe-area-inset-bottom))
+        max(16px, env(safe-area-inset-left));
+    overflow: auto;
+    overscroll-behavior: contain;
+    background: radial-gradient(ellipse at 50% 10%, #293659, var(--night) 70%);
+    color: #fff;
+}
+.product-lightbox[open] {
+    display: grid;
+    grid-template-rows: auto minmax(110px, 1fr) auto;
+    gap: clamp(10px, 2vh, 20px);
+    animation: product-photo-in 0.25s ease-out both;
+}
+.product-lightbox::backdrop {
+    background: var(--night);
+}
+html:has(.product-lightbox[open]) {
+    overflow: hidden;
+}
+
+.product-lightbox-header {
+    display: flex;
+    width: min(100%, 76rem);
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin-inline: auto;
+}
+.premium-site .product-lightbox-header h2 {
+    font-size: clamp(1rem, 2.5vw, 1.45rem);
+    letter-spacing: 0;
+}
+.product-lightbox-button {
+    display: grid;
+    width: 46px;
+    height: 46px;
+    flex: none;
+    place-items: center;
+    border: 1px solid #d9e4ff66;
+    border-radius: 6px;
+    background: #ffffff10;
+    transition: background 0.24s;
+}
+.product-lightbox-button:hover {
+    background: #ffffff25;
+}
+.product-lightbox-button:focus-visible {
+    outline-color: #ff8a92;
+}
+
+.product-lightbox-stage {
+    position: relative;
+    min-height: 0;
+    touch-action: pan-y pinch-zoom;
+    user-select: none;
+}
+.product-lightbox-stage img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    animation: product-photo-in 0.24s ease-out both;
+}
+.product-lightbox-navigation {
+    display: grid;
+    width: min(100%, 27rem);
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    justify-self: center;
+    gap: 6px 12px;
+    text-align: center;
+}
+.product-lightbox-caption {
+    font-weight: 600;
+}
+.product-lightbox-caption span {
+    color: #dce5fc;
+    font-weight: 400;
+    white-space: nowrap;
+}
+.product-lightbox-hint {
+    display: none;
+}
+@media (pointer: coarse), (max-width: 767px) {
+    .product-lightbox-hint {
+        display: block;
+        grid-column: 1 / -1;
+        color: #dce5fc;
+        font-size: 12px;
+    }
+}

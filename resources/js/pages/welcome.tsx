@@ -1,238 +1,62 @@
 import { Head } from '@inertiajs/react';
-import {
-    ArrowRight,
-    Car,
-    ChevronDown,
-    Cog,
-    Droplets,
-    Factory,
-    FileText,
-    Handshake,
-    Mail,
-    Menu,
-    Plus,
-    Search,
-    ShieldCheck,
-    Truck,
-    Wrench,
-    X,
-} from 'lucide-react';
-import { useEffect, useState, type CSSProperties, type FormEvent } from 'react';
+import { ArrowRight, Plus } from 'lucide-react';
+import { useEffect, useState, type CSSProperties } from 'react';
 import { filters, products, type Product } from '../meteore/catalog';
 import {
     AlloMoteur,
     Footer,
     HomeSections,
     Presentation,
-    menu,
-    presentationLinks,
 } from '../meteore/content';
+import { Header } from '../meteore/header';
+import { Hero } from '../meteore/hero';
+import type { Page } from '../meteore/navigation';
+import {
+    ContactPage,
+    GuaranteePage,
+    NewsPage,
+    PageHero,
+} from '../meteore/pages';
+import { ProductImages } from '../meteore/product-images';
 import { Quote, useQuote } from '../meteore/quote';
 
-type Page = 'home' | 'presentation' | 'allo-moteur';
 const pageTitles = {
     home: 'MÉTÉORE Lubrifiants — Performance haute température | OBCITO Énergies',
+    actualites: 'Actualité — MÉTÉORE Lubrifiants',
+    produits: 'Nos produits — MÉTÉORE Lubrifiants',
+    garantie: 'Garantie Protect Moteur — MÉTÉORE Lubrifiants',
+    contact: 'Contact — MÉTÉORE Lubrifiants',
     presentation: 'Présentation — MÉTÉORE Lubrifiants',
     'allo-moteur': 'Allo Moteur — MÉTÉORE Lubrifiants',
 };
 
 const categories = [
     {
-        Icon: Car,
+        image: '/meteore/famille-vehicules-legers.webp',
         title: 'Huiles véhicules légers',
         detail: 'Voitures & utilitaires',
-        target: 'gamme',
     },
     {
-        Icon: Truck,
+        image: '/meteore/poids-lourds.jpg',
         title: 'Huiles poids lourds',
         detail: 'Camions & engins agricoles',
-        target: 'gamme',
     },
     {
-        Icon: Factory,
+        image: '/meteore/famille-hydraulique.webp',
         title: 'Huiles hydrauliques',
         detail: 'Systèmes hydrauliques',
-        target: 'gamme',
     },
     {
-        Icon: Cog,
+        image: '/meteore/famille-transmission.webp',
         title: 'Huiles transmission',
         detail: 'Boîtes, ponts & ATF',
-        target: 'gamme',
     },
     {
-        Icon: Droplets,
+        image: '/meteore/famille-adblue.webp',
         title: 'AdBlue SCR',
         detail: 'Réduction des NOx',
-        target: 'gamme',
-    },
-    {
-        Icon: Wrench,
-        title: 'Infos techniques',
-        detail: 'Normes ACEA, API, OEM',
-        target: 'technique',
-    },
-    {
-        Icon: ShieldCheck,
-        title: 'Garantie Protect Moteur',
-        detail: 'Moteur assuré',
-        target: 'garantie',
-    },
-    {
-        Icon: Handshake,
-        title: 'Devenir distributeur',
-        detail: 'Réseau MÉTÉORE',
-        target: 'contact',
-    },
-    {
-        Icon: FileText,
-        title: 'Catalogue MÉTÉORE',
-        detail: '20 références',
-        target: 'gamme',
-    },
-    {
-        Icon: Mail,
-        title: 'Nous contacter',
-        detail: 'Kinshasa & Paris',
-        target: 'contact',
     },
 ];
-
-function Header({ onSearch }: { onSearch: (value: string) => void }) {
-    const [searchOpen, setSearchOpen] = useState(false);
-    const [mobileOpen, setMobileOpen] = useState(false);
-    const [draft, setDraft] = useState('');
-
-    function submit(event: FormEvent<HTMLFormElement>) {
-        event.preventDefault();
-        setSearchOpen(false);
-        onSearch(draft.trim());
-    }
-
-    return (
-        <header className="site-header">
-            <div className="site-width header-row">
-                <a className="brand" href="/">
-                    <img
-                        src="/meteore/logo.png"
-                        alt="Logo MÉTÉORE"
-                        width="102"
-                        height="42"
-                    />
-                    <span className="branding">
-                        <strong>By OBCITO Énergies</strong>
-                        <span>Lubrifiants et fluides pour moteurs</span>
-                    </span>
-                </a>
-                <nav aria-label="Navigation principale" className="desktop-nav">
-                    <a href={menu[0][0]}>Actualités</a>
-                    <div className="nav-dropdown">
-                        <a href="/presentation">
-                            Présentation <ChevronDown aria-hidden size={14} />
-                        </a>
-                        <div className="nav-flyout">
-                            {presentationLinks.map(([id, , label]) => (
-                                <a key={id} href={`/presentation#${id}`}>
-                                    {label}
-                                </a>
-                            ))}
-                        </div>
-                    </div>
-                    <a href={menu[1][0]}>Produits MÉTÉORE</a>
-                    <a href={menu[2][0]}>Allo Moteur</a>
-                </nav>
-                <div className="header-actions">
-                    <button
-                        type="button"
-                        className="icon-button"
-                        aria-label="Rechercher un produit"
-                        aria-expanded={searchOpen}
-                        onClick={() => {
-                            setSearchOpen(!searchOpen);
-                            setMobileOpen(false);
-                        }}
-                    >
-                        <Search size={17} />
-                    </button>
-                    <a
-                        className="button primary header-contact"
-                        href="/#contact"
-                    >
-                        Nous contacter
-                    </a>
-                    <button
-                        type="button"
-                        className="icon-button mobile-toggle"
-                        aria-label={
-                            mobileOpen ? 'Fermer le menu' : 'Ouvrir le menu'
-                        }
-                        aria-expanded={mobileOpen}
-                        onClick={() => {
-                            setMobileOpen(!mobileOpen);
-                            setSearchOpen(false);
-                        }}
-                    >
-                        {mobileOpen ? <X size={18} /> : <Menu size={18} />}
-                    </button>
-                </div>
-            </div>
-            {mobileOpen && (
-                <nav
-                    aria-label="Navigation mobile"
-                    className="site-width mobile-nav"
-                >
-                    {[
-                        [...menu[0]],
-                        ['/presentation', 'Présentation'],
-                        ...menu.slice(1),
-                    ].map(([href, label]) => (
-                        <a
-                            key={href}
-                            href={href}
-                            onClick={() => setMobileOpen(false)}
-                        >
-                            {label}
-                        </a>
-                    ))}
-                </nav>
-            )}
-            {searchOpen && (
-                <form
-                    className="site-width search-row"
-                    onSubmit={submit}
-                    role="search"
-                    onKeyDown={(event) => {
-                        if (event.key === 'Escape') setSearchOpen(false);
-                    }}
-                >
-                    <input
-                        autoFocus
-                        value={draft}
-                        onChange={(event) => setDraft(event.target.value)}
-                        placeholder="Rechercher une viscosité, une norme…"
-                        aria-label="Rechercher une viscosité, une norme…"
-                    />
-                    <button
-                        className="icon-button"
-                        type="submit"
-                        aria-label="Lancer la recherche"
-                    >
-                        <Search size={17} />
-                    </button>
-                    <button
-                        className="icon-button"
-                        type="button"
-                        aria-label="Fermer la recherche"
-                        onClick={() => setSearchOpen(false)}
-                    >
-                        <X size={17} />
-                    </button>
-                </form>
-            )}
-        </header>
-    );
-}
 
 function CatalogCard({
     product,
@@ -243,13 +67,7 @@ function CatalogCard({
 }) {
     return (
         <article className="product-card">
-            <div className="product-photo">
-                <img
-                    src={`/meteore/${product.image}`}
-                    alt={`${product.name} ${product.grade}`}
-                    loading="lazy"
-                />
-            </div>
+            <ProductImages product={product} />
             <div className="product-type">
                 <span className="eyebrow">{product.type}</span>
                 <span>{product.code}</span>
@@ -298,7 +116,18 @@ function normalize(value: string) {
 }
 
 export default function Welcome({ page = 'home' }: { page?: Page }) {
-    const [category, setCategory] = useState(0);
+    const [category, setCategory] = useState(() => {
+        if (typeof window === 'undefined') return 0;
+        const requested = Number(
+            new URLSearchParams(location.search).get('famille'),
+        );
+        return Number.isInteger(requested) &&
+            requested > 0 &&
+            requested < filters.length
+            ? requested
+            : 0;
+    });
+    const [showAll, setShowAll] = useState(false);
     const [level, setLevel] = useState(5);
     const [query, setQuery] = useState(() =>
         typeof window === 'undefined'
@@ -310,6 +139,37 @@ export default function Welcome({ page = 'home' }: { page?: Page }) {
     useEffect(() => {
         const id = location.hash.slice(1);
         if (id) document.getElementById(id)?.scrollIntoView();
+
+        if (
+            !('IntersectionObserver' in window) ||
+            matchMedia('(prefers-reduced-motion: reduce)').matches
+        )
+            return;
+
+        const elements = document.querySelectorAll('[data-reveal]');
+        const observer = new IntersectionObserver(
+            (entries) => {
+                for (const entry of entries) {
+                    entry.target.classList.toggle(
+                        'revealed',
+                        entry.isIntersecting,
+                    );
+                }
+            },
+            { threshold: 0 },
+        );
+
+        elements.forEach((element) => {
+            element.setAttribute('data-reveal-ready', '');
+            observer.observe(element);
+        });
+        return () => {
+            observer.disconnect();
+            elements.forEach((element) => {
+                element.removeAttribute('data-reveal-ready');
+                element.classList.remove('revealed');
+            });
+        };
     }, []);
 
     const search = normalize(query);
@@ -330,138 +190,215 @@ export default function Welcome({ page = 'home' }: { page?: Page }) {
     );
 
     function handleSearch(value: string) {
-        if (page !== 'home') {
-            location.assign(`/?q=${encodeURIComponent(value)}#gamme`);
+        if (page !== 'produits') {
+            location.assign(`/produits?q=${encodeURIComponent(value)}#gamme`);
             return;
         }
         setQuery(value);
         setCategory(0);
+        setShowAll(false);
         setLevel(5);
         scrollTo('gamme');
     }
 
+    const visibleProducts = showAll ? results : results.slice(0, 6);
+
+    function selectCategory(index: number) {
+        setCategory(index);
+        setShowAll(false);
+    }
+
+    const catalog = (
+        <section className="section-band shaded catalog-section" id="gamme">
+            <div className="site-width">
+                <div className="section-heading" data-reveal="left">
+                    <div>
+                        <p className="eyebrow accent">Catalogue</p>
+                        <h2>Notre gamme de lubrifiants</h2>
+                    </div>
+                    <p className="catalog-count" aria-live="polite">
+                        {results.length}{' '}
+                        {results.length === 1 ? 'référence' : 'références'}
+                        {query && (
+                            <>
+                                {' '}
+                                pour « {query} »{' '}
+                                <button
+                                    type="button"
+                                    className="text-link"
+                                    onClick={() => {
+                                        setQuery('');
+                                        selectCategory(0);
+                                        setLevel(5);
+                                    }}
+                                >
+                                    Effacer
+                                </button>
+                            </>
+                        )}
+                    </p>
+                </div>
+                <div
+                    className="catalog-filters"
+                    aria-label="Familles de lubrifiants"
+                >
+                    {filters.map((filter, index) => (
+                        <button
+                            type="button"
+                            key={filter}
+                            aria-pressed={category === index}
+                            onClick={() => selectCategory(index)}
+                        >
+                            {filter}
+                        </button>
+                    ))}
+                </div>
+                <div className="protection">
+                    <div>
+                        <div className="protection-labels">
+                            <span>Éco-efficacité</span>
+                            <span>Protection extrême</span>
+                        </div>
+                        <input
+                            type="range"
+                            min="1"
+                            max="5"
+                            value={level}
+                            style={
+                                {
+                                    '--protection-fill': `${(level - 1) * 25}%`,
+                                } as CSSProperties
+                            }
+                            aria-label="Niveau de protection"
+                            onChange={(event) => {
+                                setLevel(Number(event.target.value));
+                                setShowAll(false);
+                            }}
+                        />
+                    </div>
+                    <p>
+                        <strong>{level}</strong>
+                        <span>/ 5 — niveau de protection</span>
+                    </p>
+                </div>
+                {results.length ? (
+                    <div className="product-grid">
+                        {visibleProducts.map((product) => (
+                            <CatalogCard
+                                key={product.id}
+                                product={product}
+                                onAdd={quote.add}
+                            />
+                        ))}
+                    </div>
+                ) : (
+                    <p className="empty-results">
+                        Aucune référence ne correspond à votre recherche.
+                    </p>
+                )}
+                {visibleProducts.length < results.length && (
+                    <div className="catalog-more">
+                        <button
+                            className="button secondary"
+                            type="button"
+                            onClick={() => setShowAll(true)}
+                        >
+                            Afficher les{' '}
+                            {results.length - visibleProducts.length} autres
+                            références
+                        </button>
+                    </div>
+                )}
+            </div>
+        </section>
+    );
+
     return (
-        <>
+        <div className="premium-site">
             <Head title={pageTitles[page]} />
-            <Header onSearch={handleSearch} />
+            <Header
+                currentPath={page === 'home' ? '/' : `/${page}`}
+                onSearch={handleSearch}
+            />
+            {page === 'actualites' && <NewsPage />}
+            {page === 'garantie' && <GuaranteePage />}
+            {page === 'contact' && <ContactPage />}
             {page === 'presentation' && <Presentation />}
+            {page === 'produits' && (
+                <main>
+                    <PageHero
+                        title="Nos produits MÉTÉORE"
+                        intro="Huiles moteur, fluides hydrauliques, huiles de transmission et AdBlue. Explorez les références et leurs conditionnements."
+                        image="/meteore/famille-vehicules-legers.webp"
+                    >
+                        <a className="button primary" href="#gamme">
+                            Explorer le catalogue
+                        </a>
+                    </PageHero>
+                    {catalog}
+                </main>
+            )}
             {page === 'allo-moteur' && <AlloMoteur />}
             {page === 'home' && (
                 <main>
-                    <h1 className="sr-only">MÉTÉORE Lubrifiants</h1>
+                    <Hero />
                     <section
                         className="site-width categories"
-                        aria-label="Catégories"
+                        id="solutions"
+                        aria-labelledby="usage-title"
                     >
-                        <p className="eyebrow">01 — Catégories</p>
+                        <div className="section-heading" data-reveal>
+                            <div>
+                                <p className="eyebrow accent">Applications</p>
+                                <h2 id="usage-title">
+                                    Un fluide pour chaque usage.
+                                </h2>
+                            </div>
+                            <a className="text-link" href="/produits#gamme">
+                                Voir toute la gamme
+                            </a>
+                        </div>
                         <div className="category-grid">
                             {categories.map(
-                                ({ Icon, title, detail, target }) => (
-                                    <button
+                                ({ image, title, detail }, index) => (
+                                    <a
                                         key={title}
-                                        type="button"
+                                        href={`/produits?famille=${index + 1}#gamme`}
                                         className="category"
-                                        onClick={() => scrollTo(target)}
+                                        data-reveal={
+                                            index % 2 === 0 ? 'left' : 'right'
+                                        }
                                     >
-                                        <Icon
-                                            size={28}
-                                            strokeWidth={1.5}
+                                        <span className="category-photo">
+                                            <img
+                                                src={image}
+                                                alt=""
+                                                loading="lazy"
+                                            />
+                                        </span>
+                                        <span className="category-copy">
+                                            <span className="category-title">
+                                                {title}
+                                            </span>
+                                            <span className="category-detail">
+                                                {detail}
+                                            </span>
+                                        </span>
+                                        <ArrowRight
+                                            className="category-arrow"
+                                            size={17}
                                             aria-hidden
                                         />
-                                        <span className="category-title">
-                                            {title}
-                                        </span>
-                                        <span className="category-detail">
-                                            {detail}
-                                        </span>
-                                        <span className="action-text">
-                                            Découvrir{' '}
-                                            <ArrowRight size={12} aria-hidden />
-                                        </span>
-                                    </button>
+                                    </a>
                                 ),
                             )}
                         </div>
                     </section>
-                    <section className="section-band shaded" id="gamme">
-                        <div className="site-width">
-                            <div className="section-heading">
-                                <div>
-                                    <p className="eyebrow">02 — Gamme</p>
-                                    <h2>Notre gamme de lubrifiants</h2>
-                                </div>
-                                <p className="catalog-count" aria-live="polite">
-                                    {results.length}{' '}
-                                    {results.length > 1
-                                        ? 'références affichées'
-                                        : 'référence affichée'}
-                                </p>
-                            </div>
-                            <div
-                                className="catalog-filters"
-                                aria-label="Familles de lubrifiants"
-                            >
-                                {filters.map((filter, index) => (
-                                    <button
-                                        type="button"
-                                        key={filter}
-                                        aria-pressed={category === index}
-                                        onClick={() => setCategory(index)}
-                                    >
-                                        {filter}
-                                    </button>
-                                ))}
-                            </div>
-                            <div className="protection">
-                                <div>
-                                    <div className="protection-labels">
-                                        <span>Éco-efficacité</span>
-                                        <span>Protection extrême</span>
-                                    </div>
-                                    <input
-                                        type="range"
-                                        min="1"
-                                        max="5"
-                                        value={level}
-                                        style={
-                                            {
-                                                '--protection-fill': `${(level - 1) * 25}%`,
-                                            } as CSSProperties
-                                        }
-                                        aria-label="Niveau de protection"
-                                        onChange={(event) =>
-                                            setLevel(Number(event.target.value))
-                                        }
-                                    />
-                                </div>
-                                <p>
-                                    <strong>{level}</strong>
-                                    <span>/ 5 — niveau de protection</span>
-                                </p>
-                            </div>
-                            {results.length ? (
-                                <div className="product-grid">
-                                    {results.map((product) => (
-                                        <CatalogCard
-                                            key={product.id}
-                                            product={product}
-                                            onAdd={quote.add}
-                                        />
-                                    ))}
-                                </div>
-                            ) : (
-                                <p className="empty-results">
-                                    Aucune référence ne correspond à votre
-                                    recherche.
-                                </p>
-                            )}
-                        </div>
-                    </section>
-                    <HomeSections />
+                    <HomeSections catalog={catalog} />
                 </main>
             )}
             <Footer />
-            {page === 'home' && <Quote {...quote} />}
-        </>
+            {(page === 'home' || page === 'produits') && <Quote {...quote} />}
+        </div>
     );
 }

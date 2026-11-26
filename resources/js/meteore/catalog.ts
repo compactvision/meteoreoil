@@ -8,6 +8,39 @@ export const filters = [
 ];
 
 type ProductData = [string, string, string, string, string, number, number?];
+type ProductPhoto = [file: string, caption: string];
+
+const productPhotos: Partial<Record<string, ProductPhoto[]>> = {
+    SAE40: [
+        ['sae40-5l-recto', '5 L · recto'],
+        ['sae40-5l-verso', '5 L · verso'],
+        ['sae40-1l', '1 L'],
+        ['sae40-20l', '20 L'],
+    ],
+    SAE50: [
+        ['sae50-5l-recto', '5 L · recto'],
+        ['sae50-5l-verso', '5 L · verso'],
+        ['sae50-1l', '1 L'],
+        ['sae50-20l', '20 L'],
+    ],
+    '68HM': [
+        ['hm68-5l', '5 L'],
+        ['hm68-5l-etiquette', '5 L · autre étiquette'],
+        ['hm68-1l', '1 L'],
+        ['hm68-20l', '20 L'],
+    ],
+    SAE90: [
+        ['sae90-5l', '5 L'],
+        ['sae90-1l', '1 L'],
+        ['sae90-20l', '20 L'],
+    ],
+    'ATF III': [
+        ['atf-iii-5l', '5 L'],
+        ['atf-iii-5l-etiquette', '5 L · autre étiquette'],
+        ['atf-iii-1l', '1 L'],
+        ['atf-iii-20l', '20 L'],
+    ],
+};
 
 const references: ProductData[] = [
     [
@@ -219,6 +252,7 @@ export const products = references.map(
             protection,
             extraSpecs,
             category,
+            photos: productPhotos[name],
             image:
                 category === 1
                     ? 'light.jpg'
