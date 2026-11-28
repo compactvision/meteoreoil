@@ -7,10 +7,10 @@ export const filters = [
     'AdBlue',
 ];
 
-type ProductData = [string, string, string, string, string, number, number?];
 type ProductPhoto = [file: string, caption: string];
+const illustration = 'Bidon de 5 L · visuel d’illustration';
 
-const productPhotos: Partial<Record<string, ProductPhoto[]>> = {
+const productPhotos = {
     SAE40: [
         ['sae40-5l-recto', '5 L · recto'],
         ['sae40-5l-verso', '5 L · verso'],
@@ -23,24 +23,60 @@ const productPhotos: Partial<Record<string, ProductPhoto[]>> = {
         ['sae50-1l', '1 L'],
         ['sae50-20l', '20 L'],
     ],
+    '5W40': [['5w40-5l', illustration]],
+    '5W50': [['5w50-5l', illustration]],
+    '10W40': [['10w40-5l', illustration]],
+    '15W40': [['15w40-5l', illustration]],
+    '15W40 E7': [['15w40-e7-5l', illustration]],
+    '15W50': [['15w50-5l', illustration]],
+    '20W50': [['20w50-5l', illustration]],
     '68HM': [
+        ['hm68-5l-illustration', illustration],
         ['hm68-5l', '5 L'],
         ['hm68-5l-etiquette', '5 L · autre étiquette'],
         ['hm68-1l', '1 L'],
         ['hm68-20l', '20 L'],
     ],
+    '68HV': [['hv68-5l', illustration]],
+    '80W90': [['80w90-5l', illustration]],
     SAE90: [
+        ['sae90-5l-illustration', illustration],
         ['sae90-5l', '5 L'],
         ['sae90-1l', '1 L'],
         ['sae90-20l', '20 L'],
     ],
     'ATF III': [
+        ['atf-iii-5l-illustration', illustration],
         ['atf-iii-5l', '5 L'],
         ['atf-iii-5l-etiquette', '5 L · autre étiquette'],
         ['atf-iii-1l', '1 L'],
         ['atf-iii-20l', '20 L'],
     ],
-};
+    'CVT VERTE': [['cvt-verte-5l', illustration]],
+    'AD BLUE': [['ad-blue-5l', illustration]],
+} satisfies Record<string, [ProductPhoto, ...ProductPhoto[]]>;
+
+type ProductData = [
+    grade: string,
+    label: string,
+    name: keyof typeof productPhotos,
+    description: string,
+    specs: string,
+    protection: number,
+    extraSpecs?: number,
+];
+
+const engineGrades = [
+    'SAE 40',
+    'SAE 50',
+    '5W40',
+    '5W50',
+    '10W40',
+    '15W40',
+    '15W50',
+    '20W50',
+];
+const gradeOrder = new Map(engineGrades.map((grade, index) => [grade, index]));
 
 const references: ProductData[] = [
     [
@@ -225,7 +261,7 @@ const references: ProductData[] = [
     ],
 ];
 
-export const products = references.map(
+const productsByCategory = references.map(
     (
         [grade, label, name, description, specs, protection, extraSpecs],
         index,
@@ -253,15 +289,15 @@ export const products = references.map(
             extraSpecs,
             category,
             photos: productPhotos[name],
-            image:
-                category === 1
-                    ? 'light.jpg'
-                    : category === 5
-                      ? 'adblue.jpg'
-                      : 'heavy.jpg',
             sizes: category === 5 ? [5, 20, 210] : [1, 5, 20, 210],
         };
     },
+);
+
+export const products = productsByCategory.sort(
+    (first, second) =>
+        (gradeOrder.get(first.grade) ?? engineGrades.length) -
+        (gradeOrder.get(second.grade) ?? engineGrades.length),
 );
 
 export type Product = (typeof products)[number];

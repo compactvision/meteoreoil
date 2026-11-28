@@ -1,11 +1,9 @@
 import {
     ArrowRight,
     BadgeCheck,
-    Car,
     Check,
     Droplets,
     Earth,
-    Factory,
     Flame,
     Fuel,
     Gauge,
@@ -14,7 +12,6 @@ import {
     Phone,
     ShieldCheck,
     Timer,
-    Truck,
     Wrench,
 } from 'lucide-react';
 import type { ReactNode } from 'react';
@@ -50,21 +47,27 @@ const benefits = [
 ];
 
 const solutions = [
-    [
-        'Auto & Moto',
-        'Pour une conduite fluide et un moteur préservé du stress thermique quotidien.',
-        'Véhicules légers',
-    ],
-    [
-        'Heavy Duty',
-        'Lubrifiants haute performance pour camions, engins de chantier et machines agricoles soumis à de lourdes charges sous le soleil.',
-        'Poids lourds & engins',
-    ],
-    [
-        'Industriel',
-        'Des huiles industrielles de pointe pour garantir la continuité de vos opérations sans surchauffe.',
-        'Hydrauliques & transmission',
-    ],
+    {
+        title: 'Auto & Moto',
+        copy: 'Pour une conduite fluide et un moteur préservé du stress thermique quotidien.',
+        label: 'Véhicules légers',
+        image: '/meteore/application-auto-moto.webp',
+        alt: 'Une voiture et une moto côte à côte',
+    },
+    {
+        title: 'Heavy Duty',
+        copy: 'Lubrifiants haute performance pour camions, engins de chantier et machines agricoles soumis à de lourdes charges sous le soleil.',
+        label: 'Poids lourds & engins',
+        image: '/meteore/application-heavy-duty.webp',
+        alt: 'Un 4×4, un camion et un tracteur agricole',
+    },
+    {
+        title: 'Industriel',
+        copy: 'Des huiles industrielles de pointe pour garantir la continuité de vos opérations sans surchauffe.',
+        label: 'Hydrauliques & transmission',
+        image: '/meteore/application-industriel.webp',
+        alt: 'Un groupe électrogène et une machine de production dans une usine',
+    },
 ];
 
 const heavyVehiclesImage = '/meteore/poids-lourds.jpg';
@@ -96,67 +99,60 @@ const news = [
     ],
 ];
 
-const offices = [
-    [
-        'RD Congo',
-        '+243 855 70 89 94',
-        '+243855708994',
-        '55/61 Avenue Madrandele, C/Limete, Kinshasa',
-    ],
-    [
-        'International',
-        '+33 749 97 31 57',
-        '+33749973157',
-        '3 Rue de l’arrivée, 75015 Paris, France',
-    ],
+type Office = {
+    region: string;
+    address: string;
+    contacts: [label: string, href: string][];
+};
+
+const kinshasaOffice = {
+    region: 'RD Congo',
+    address: '55/61 Avenue Madrandele, C/Limete, Kinshasa',
+};
+const parisOffice = {
+    region: 'International',
+    address: '3 Rue de l’arrivée, 75015 Paris, France',
+};
+
+const deliveryOffices: Office[] = [
+    {
+        ...kinshasaOffice,
+        address: '63 avenue Colonel Mondjiba, Cotex, Kinshasa',
+        contacts: [],
+    },
+    {
+        ...parisOffice,
+        contacts: [
+            ['+33 6 27 80 85 65', 'tel:+33627808565'],
+            ['export@meteore-oil.com', 'mailto:export@meteore-oil.com'],
+        ],
+    },
+];
+
+const quoteOffices: Office[] = [
+    {
+        ...kinshasaOffice,
+        contacts: [['+243 855 70 89 94', 'tel:+243855708994']],
+    },
+    {
+        ...parisOffice,
+        contacts: [['+33 749 97 31 57', 'tel:+33749973157']],
+    },
 ];
 
 export function Footer() {
     return (
         <footer className="site-footer" id="contact">
             <div className="site-width">
-                <div className="footer-top">
-                    <div data-reveal="rise">
-                        <p className="eyebrow">Contact</p>
-                        <h2>Parlons de vos moteurs.</h2>
-                        <a
-                            className="footer-email"
-                            href="mailto:info@obcito-energies.com"
-                        >
-                            info@obcito-energies.com
-                        </a>
-                    </div>
-                    <div className="footer-marks" data-reveal="rise">
-                        <div className="footer-mark footer-veritas">
-                            <img
-                                src="/meteore/bureau-veritas.webp"
-                                alt="Bureau Veritas"
-                                width="471"
-                                height="588"
-                                loading="lazy"
-                            />
-                        </div>
-                        <div className="footer-brand">
-                            <div className="footer-mark">
-                                <img
-                                    src="/meteore/logo.png"
-                                    alt="Logo MÉTÉORE"
-                                    width="3188"
-                                    height="1262"
-                                    loading="lazy"
-                                />
-                            </div>
-                            <p>
-                                La marque de lubrifiants et fluides d’OBCITO
-                                Énergies, conçue pour les moteurs soumis aux
-                                climats extrêmes.
-                            </p>
-                        </div>
-                    </div>
+                <div className="footer-support" data-reveal="rise">
+                    <p className="eyebrow">Assistance technique</p>
+                    <a href="mailto:diagnostics@meteoroil.com">
+                        diagnostics@meteoroil.com
+                    </a>
                 </div>
                 <div className="footer-menu">
-                    <nav aria-label="Menu de pied de page">
-                        <p className="eyebrow">Menu</p>
+                    <nav aria-label="Plan du site">
+                        <p className="eyebrow">Plan du site</p>
                         {navigation.map(([href, label]) => (
                             <PageLink key={href} href={href}>
                                 {label}
@@ -173,21 +169,42 @@ export function Footer() {
                             </PageLink>
                         ))}
                     </nav>
-                    <div className="footer-offices">
-                        {offices.map(([region, phone, href, address]) => (
-                            <div key={region}>
-                                <p className="eyebrow">{region}</p>
-                                <a href={`tel:${href}`}>{phone}</a>
-                                <p>{address}</p>
-                            </div>
-                        ))}
+                    <div className="footer-company">
+                        <p className="eyebrow">MÉTÉORE</p>
+                        <p>La marque de l’entreprise OBCITO Énergies.</p>
+                        <address>
+                            <p>3 rue de l’Arrivée, 75015 Paris – France</p>
+                            <a href="tel:+33321435757">+33 3 21 43 57 57</a>
+                            <a href="mailto:info@obcito-energies.com">
+                                info@obcito-energies.com
+                            </a>
+                        </address>
                     </div>
                 </div>
                 <div className="footer-bottom">
                     <span>
                         © 2023 MÉTÉORE Lubrifiants. Tous droits réservés.
                     </span>
-                    <span>By OBCITO Énergies</span>
+                    <div className="footer-marks">
+                        <div className="footer-mark">
+                            <img
+                                src="/meteore/bureau-veritas.webp"
+                                alt="Bureau Veritas"
+                                width="471"
+                                height="588"
+                                loading="lazy"
+                            />
+                        </div>
+                        <div className="footer-mark">
+                            <img
+                                src="/meteore/logo.png"
+                                alt="Logo MÉTÉORE"
+                                width="3188"
+                                height="1262"
+                                loading="lazy"
+                            />
+                        </div>
+                    </div>
                 </div>
             </div>
         </footer>
@@ -195,7 +212,6 @@ export function Footer() {
 }
 
 function Solutions() {
-    const icons = [Car, Truck, Factory];
     return (
         <section
             id="solutions"
@@ -210,33 +226,31 @@ function Solutions() {
                     solution adaptée à vos exigences.
                 </p>
                 <div className="tile-grid three" data-reveal-group>
-                    {solutions.map(([title, copy, label], index) => {
-                        const Icon = icons[index];
-                        return (
+                    {solutions.map(
+                        ({ title, copy, label, image, alt }, index) => (
                             <PageLink
                                 key={title}
                                 href="/produits#gamme"
                                 className="tile solution-tile"
                                 data-reveal={index % 2 === 0 ? 'left' : 'right'}
                             >
-                                <div className="solution-marker">
-                                    <Icon
-                                        size={24}
-                                        strokeWidth={1.5}
-                                        aria-hidden
-                                    />
-                                    <span className="solution-number">
-                                        0{index + 1}
-                                    </span>
-                                </div>
+                                <img
+                                    className="solution-image"
+                                    src={image}
+                                    alt={alt}
+                                    width="960"
+                                    height="640"
+                                    loading="lazy"
+                                    decoding="async"
+                                />
                                 <h3>{title}</h3>
                                 <p>{copy}</p>
                                 <span className="action-text">
                                     {label} <ArrowRight size={14} aria-hidden />
                                 </span>
                             </PageLink>
-                        );
-                    })}
+                        ),
+                    )}
                 </div>
             </div>
         </section>
@@ -436,14 +450,24 @@ export function NewsSection({ dedicated = false }: { dedicated?: boolean }) {
     );
 }
 
-function Offices({ action }: { action: string }) {
+function Offices({
+    action,
+    locations,
+}: {
+    action: string;
+    locations: Office[];
+}) {
     return (
         <>
             <div className="tile-grid two">
-                {offices.map(([region, phone, href, address]) => (
+                {locations.map(({ region, address, contacts }) => (
                     <article className="tile office" key={region}>
                         <p className="eyebrow">{region}</p>
-                        <a href={`tel:${href}`}>{phone}</a>
+                        {contacts.map(([label, href]) => (
+                            <a key={href} href={href}>
+                                {label}
+                            </a>
+                        ))}
                         <p>{address}</p>
                     </article>
                 ))}
@@ -566,7 +590,10 @@ export function Presentation() {
                             loading="lazy"
                         />
                     </figure>
-                    <Offices action="Demander une livraison" />
+                    <Offices
+                        action="Demander une livraison"
+                        locations={deliveryOffices}
+                    />
                 </div>
             </section>
             <section className="section-band shaded" id="entreprise">
@@ -728,7 +755,10 @@ export function AlloMoteur() {
             </section>
             <section className="section-band">
                 <div className="site-width">
-                    <Offices action="Demander un devis" />
+                    <Offices
+                        action="Demander un devis"
+                        locations={quoteOffices}
+                    />
                 </div>
             </section>
         </main>

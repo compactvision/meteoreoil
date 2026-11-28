@@ -35,9 +35,8 @@
     transform: translateX(3px);
 }
 .branding {
-    display: none;
     padding-left: 15px;
-    border-left: 1px solid var(--line);
+    border-left: 1px solid var(--signal);
     color: var(--muted);
     font-size: 11px;
     line-height: 1.4;
@@ -48,8 +47,6 @@
     color: var(--brand-navy);
     font-size: 10px;
     font-weight: 700;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
 }
 
 .desktop-nav,
@@ -290,14 +287,11 @@ html:has(.mobile-menu[open]) {
 }
 
 @media (min-width: 640px) {
-    .branding {
-        display: block;
-    }
     .site-header .search-row .button {
         padding-inline: 23px;
     }
 }
-@media (min-width: 1024px) {
+@media (min-width: 1240px) {
     .header-row {
         height: 84px;
     }
@@ -418,17 +412,29 @@ html:has(.mobile-menu[open]) {
         display: none;
     }
 }
-@media (min-width: 1024px) and (max-width: 1260px) {
-    .branding {
-        display: none;
-    }
-}
 @media (max-width: 639px) {
+    .premium-site .header-row {
+        gap: 8px;
+        padding-inline: 14px;
+    }
+    .brand {
+        min-width: 0;
+        flex: 0 1 auto;
+        gap: 8px;
+    }
+    .brand img {
+        width: clamp(72px, 23vw, 122px);
+        flex: none;
+    }
+    .branding {
+        padding-left: 8px;
+        font-size: 10px;
+    }
     .search-field-icon {
         display: none;
     }
 }
-@media (max-width: 1023px) {
+@media (width < 1240px) {
     .premium-site section[id],
     .premium-site footer[id] {
         scroll-margin-top: 72px;

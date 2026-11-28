@@ -15,12 +15,10 @@ export function ProductImages({ product }: { product: Product }) {
     const titleId = useId();
 
     const photos = product.photos;
-    const count = photos?.length ?? 1;
-    const active = photos?.[selected];
-    const src = active ? photoUrl(active[0]) : `/meteore/${product.image}`;
-    const alt = active
-        ? `${product.name}, ${active[1]}`
-        : 'Visuel d’illustration du conditionnement';
+    const count = photos.length;
+    const [filename, caption] = photos[selected];
+    const src = photoUrl(filename);
+    const alt = `${product.name}, ${caption}`;
 
     function changeView(step: number) {
         setSelected((previous) => (previous + count + step) % count);
@@ -51,7 +49,7 @@ export function ProductImages({ product }: { product: Product }) {
     }
 
     return (
-        <div className={photos ? 'product-gallery' : undefined}>
+        <div className="product-gallery">
             <button
                 ref={opener}
                 type="button"
@@ -68,34 +66,28 @@ export function ProductImages({ product }: { product: Product }) {
                     <Maximize2 size={17} strokeWidth={1.7} />
                 </span>
             </button>
-            {photos && (
-                <>
-                    <p className="product-gallery-caption" aria-live="polite">
-                        {active?.[1]}
-                    </p>
-                    <div
-                        className="product-thumbnails"
-                        role="group"
-                        aria-label={`Photos de ${product.name}`}
-                    >
-                        {photos.map(([file, label], index) => (
-                            <button
-                                type="button"
-                                key={file}
-                                onClick={() => setSelected(index)}
-                                aria-label={`Afficher ${label}`}
-                                aria-pressed={selected === index}
-                                title={label}
-                            >
-                                <img
-                                    src={photoUrl(file)}
-                                    alt=""
-                                    loading="lazy"
-                                />
-                            </button>
-                        ))}
-                    </div>
-                </>
+            <p className="product-gallery-caption" aria-live="polite">
+                {caption}
+            </p>
+            {count > 1 && (
+                <div
+                    className="product-thumbnails"
+                    role="group"
+                    aria-label={`Photos de ${product.name}`}
+                >
+                    {photos.map(([file, label], index) => (
+                        <button
+                            type="button"
+                            key={file}
+                            onClick={() => setSelected(index)}
+                            aria-label={`Afficher ${label}`}
+                            aria-pressed={selected === index}
+                            title={label}
+                        >
+                            <img src={photoUrl(file)} alt="" loading="lazy" />
+                        </button>
+                    ))}
+                </div>
             )}
             <dialog
                 ref={preview}
@@ -155,7 +147,7 @@ export function ProductImages({ product }: { product: Product }) {
                             aria-live="polite"
                             aria-atomic="true"
                         >
-                            {active?.[1]}{' '}
+                            {caption}{' '}
                             <span>
                                 · {selected + 1} / {count}
                             </span>

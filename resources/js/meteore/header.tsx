@@ -21,8 +21,8 @@ function Brand() {
                 height="1262"
             />
             <span className="branding">
-                <strong>OBCITO Énergies</strong>
-                <span>Lubrifiants & fluides</span>
+                <strong>by Obcito energies</strong>
+                <span>Lubrifiant, additif & fluides</span>
             </span>
         </PageLink>
     );
@@ -46,7 +46,7 @@ export function Header({
     const presentationButton = useRef<HTMLButtonElement>(null);
 
     useEffect(() => {
-        const desktop = matchMedia('(min-width: 1024px)');
+        const desktop = matchMedia('(min-width: 1240px)');
         const closeOnDesktop = (event: MediaQueryListEvent) => {
             if (event.matches && mobileMenu.current?.open)
                 mobileMenu.current.close();

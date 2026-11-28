@@ -161,39 +161,6 @@
 .hero-scroll:hover {
     background: #ffffff1c;
 }
-.hero-facts {
-    background: var(--stone);
-    color: var(--brand-navy);
-}
-.hero-facts-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1.25fr;
-}
-.hero-facts-grid > div {
-    display: flex;
-    min-height: 96px;
-    align-items: center;
-    gap: clamp(10px, 1.4vw, 20px);
-    padding: 14px clamp(14px, 2.5vw, 42px);
-    border-left: 1px solid #c6cfe3;
-}
-.hero-facts-grid > div:first-child {
-    padding-left: 0;
-    border-left: 0;
-}
-.hero-facts-grid strong {
-    color: var(--ink);
-    font-family: var(--heading);
-    font-size: clamp(1.35rem, 2.4vw, 2.4rem);
-    white-space: nowrap;
-    line-height: 0.95;
-}
-.hero-facts-grid span {
-    max-width: 155px;
-    color: #4a546e;
-    font-size: 12px;
-    line-height: 1.4;
-}
 
 .premium-site .section-band,
 .premium-site .categories {
@@ -337,10 +304,10 @@
     border-top: 3px solid var(--brand-blue);
     background: var(--stone);
 }
-.premium-site .catalog-count {
+.premium-site .catalog-query {
     color: #424d68;
 }
-.premium-site .catalog-count .text-link {
+.premium-site .catalog-query .text-link {
     margin-inline-start: 8px;
 }
 .premium-site .catalog-filters {
@@ -530,24 +497,29 @@
     border-top: 5px solid var(--brand-rule);
     background: var(--brand-navy);
 }
-.premium-site .footer-top {
-    align-items: center;
-    padding-block: 12px 42px;
-}
-.premium-site .footer-top .eyebrow {
-    max-width: none;
+.premium-site .footer-support .eyebrow {
     color: #d6e1ff;
-    font-family: var(--font-sans);
+}
+.footer-support a {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+.footer-support a:hover {
+    text-decoration: underline;
 }
 .footer-marks {
     display: grid;
-    grid-template-columns: minmax(0, 148px) minmax(0, 232px);
-    width: min(100%, 404px);
-    align-items: start;
-    gap: clamp(12px, 2vw, 24px);
+    grid-template-columns: minmax(0, 52px) minmax(0, 126px);
+    width: min(100%, 190px);
+    align-items: center;
+    gap: 12px;
+    margin-inline-start: auto;
 }
 .footer-mark {
-    padding: 12px;
+    padding: 8px;
     border-radius: 5px;
     background: var(--paper);
 }
@@ -556,38 +528,20 @@
     width: 100%;
     height: auto;
 }
-.footer-veritas {
-    padding: clamp(8px, 1vw, 14px);
-}
-.footer-brand p {
-    margin-top: 13px;
-    color: #dce5fc;
-    font-size: 13px;
-    line-height: 1.6;
-    text-align: right;
-}
-.footer-email {
-    display: inline-block;
-    margin-top: 17px;
-    color: #dce5fc;
-    overflow-wrap: anywhere;
-}
-.footer-email:hover {
-    color: #fff;
-}
 .premium-site .footer-menu {
-    grid-template-columns: 1fr 1.13fr 1.15fr;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
 }
-.footer-offices {
+.footer-company,
+.footer-company address {
     display: grid;
-    gap: 18px;
+    align-content: start;
+    gap: 8px;
+    overflow-wrap: anywhere;
     font-size: 14px;
 }
-.footer-offices p:not(.eyebrow) {
+.footer-company address {
     color: #c1cbe3;
-}
-.footer-offices a:hover {
-    color: #ffffff;
+    font-style: normal;
 }
 
 .premium-site .inner-hero {
@@ -718,24 +672,6 @@
         width: 30px;
         height: 30px;
     }
-    .hero-facts-grid {
-        grid-template-columns: 0.8fr 0.75fr 1.15fr;
-    }
-    .hero-facts-grid > div {
-        min-height: 83px;
-        flex-direction: column;
-        align-items: start;
-        justify-content: center;
-        gap: 6px;
-        padding-inline: 10px;
-    }
-    .hero-facts-grid span {
-        font-size: 10px;
-    }
-    .hero-facts-grid strong {
-        font-size: clamp(1.2rem, 5vw, 1.65rem);
-        white-space: normal;
-    }
     .editorial-grid {
         grid-template-columns: 1fr;
     }
@@ -745,9 +681,8 @@
     .premium-site .footer-menu {
         grid-template-columns: 1fr 1fr;
     }
-    .footer-offices {
+    .footer-company {
         grid-column: 1 / -1;
-        grid-template-columns: 1fr 1fr;
     }
     .premium-site .guarantee-section::before {
         background:
@@ -758,15 +693,6 @@
 @media (max-width: 539px) {
     .premium-site .category-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-    .premium-site .footer-top {
-        align-items: start;
-        flex-direction: column;
-        gap: 28px;
-    }
-    .footer-marks {
-        grid-template-columns: minmax(0, 0.63fr) minmax(0, 1fr);
-        align-self: end;
     }
     .premium-site .button.quote-trigger {
         right: 12px;

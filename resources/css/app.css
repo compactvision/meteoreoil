@@ -195,7 +195,7 @@ em {
     gap: 16px;
     flex-wrap: wrap;
 }
-.catalog-count {
+.catalog-query {
     color: var(--muted);
     font-size: 14px;
 }
@@ -482,15 +482,12 @@ em {
 .solution-tile svg {
     margin-bottom: 0;
 }
-.solution-marker {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 24px;
-}
-.solution-marker .solution-number {
-    margin: 0;
-    color: rgb(244 242 235 / 0.45);
+.solution-image {
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    object-fit: cover;
 }
 .dark-band .tile-grid {
     margin-top: 48px;
@@ -589,14 +586,10 @@ em {
     font-size: 14px;
 }
 .site-footer {
-    padding-top: 56px;
+    padding-top: 32px;
 }
-.footer-top {
-    display: flex;
-    align-items: end;
-    justify-content: space-between;
-    gap: 20px;
-    padding-bottom: 40px;
+.footer-support {
+    padding-bottom: 28px;
 }
 .footer-menu {
     display: grid;
@@ -620,9 +613,10 @@ em {
 }
 .footer-bottom {
     display: flex;
+    align-items: center;
     flex-wrap: wrap;
     justify-content: space-between;
-    gap: 10px;
+    gap: 16px;
     padding-block: 24px;
     border-top: 1px solid rgb(244 242 235 / 0.18);
     color: rgb(244 242 235 / 0.55);
@@ -749,6 +743,11 @@ em {
 }
 .office a:hover {
     color: var(--red);
+}
+.office a[href^='mailto:'] {
+    display: block;
+    font-size: 18px;
+    overflow-wrap: anywhere;
 }
 .tile-grid + .button {
     margin-top: 24px;

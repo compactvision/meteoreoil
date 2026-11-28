@@ -177,7 +177,7 @@ export default function Welcome({ page = 'home' }: { page?: Page }) {
         scrollTo('gamme');
     }
 
-    const visibleProducts = showAll ? results : results.slice(0, 6);
+    const visibleProducts = showAll ? results : results.slice(0, 9);
 
     function selectCategory(index: number) {
         setCategory(index);
@@ -192,27 +192,22 @@ export default function Welcome({ page = 'home' }: { page?: Page }) {
                         <p className="eyebrow accent">Catalogue</p>
                         <h2>Notre gamme de lubrifiants</h2>
                     </div>
-                    <p className="catalog-count" aria-live="polite">
-                        {results.length}{' '}
-                        {results.length === 1 ? 'référence' : 'références'}
-                        {query && (
-                            <>
-                                {' '}
-                                pour « {query} »{' '}
-                                <button
-                                    type="button"
-                                    className="text-link"
-                                    onClick={() => {
-                                        setQuery('');
-                                        selectCategory(0);
-                                        setLevel(5);
-                                    }}
-                                >
-                                    Effacer
-                                </button>
-                            </>
-                        )}
-                    </p>
+                    {query && (
+                        <p className="catalog-query" aria-live="polite">
+                            Résultats pour « {query} »{' '}
+                            <button
+                                type="button"
+                                className="text-link"
+                                onClick={() => {
+                                    setQuery('');
+                                    selectCategory(0);
+                                    setLevel(5);
+                                }}
+                            >
+                                Effacer
+                            </button>
+                        </p>
+                    )}
                 </div>
                 <div
                     className="catalog-filters"

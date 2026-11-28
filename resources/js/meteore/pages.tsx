@@ -111,35 +111,64 @@ export function GuaranteePage() {
     );
 }
 
-const email = 'info@obcito-energies.com';
-const contacts = [
+const exportEmail = 'export@meteore-oil.com';
+const company = 'OBCITO Énergies';
+
+type CountryContact = {
+    country: string;
+    location: string;
+    company?: string;
+    address?: string;
+    intro?: string;
+    emails: string[];
+    phone?: string;
+};
+
+const contacts: CountryContact[] = [
     {
         country: 'France',
-        city: 'Paris',
-        address: '3 rue de l’arrivée, 75015 Paris',
-        phone: '+33 3 21 43 57 57',
-        tel: '+33321435757',
+        location: 'Paris',
+        company,
+        address: '3 rue de l’Arrivée, 75015 Paris – France',
+        intro: 'Pour toutes vos commandes vers la France et à l’exportation',
+        emails: [exportEmail, 'direct.commercial@meteore-oil.com'],
+        phone: '+33 6 27 80 85 65',
     },
     {
         country: 'RD Congo',
-        city: 'Kinshasa',
-        address: '55/61 Avenue Madrandele, C/Limete, Kinshasa',
+        location: 'Kinshasa',
+        company,
+        address: '63 avenue Colonel Mondjiba, Cotex, Kinshasa',
+        emails: ['commercial.cd@meteore-oil.com'],
         phone: '+243 855 70 89 94',
-        tel: '+243855708994',
     },
-    { country: 'Côte d’Ivoire' },
-    { country: 'Sénégal' },
+    {
+        country: 'Côte d’Ivoire',
+        location: 'Abidjan',
+        company,
+        emails: ['commercial.ci@meteore-oil.com'],
+    },
+    {
+        country: 'Sénégal',
+        location: 'Dakar',
+        company,
+        emails: ['commercial.sn@meteore-oil.com'],
+    },
+    {
+        country: 'Afrique – Océan Indien',
+        location: 'Seychelles',
+        emails: [exportEmail],
+    },
 ];
 
 export function ContactPage() {
     return (
         <main>
             <PageHero
-                label="OBCITO Énergies"
                 title="Contact"
                 intro="Une question sur un produit, une demande de livraison ou la garantie Protect Moteur ? Écrivez à l’équipe MÉTÉORE."
             >
-                <a className="button primary" href={`mailto:${email}`}>
+                <a className="button primary" href={`mailto:${exportEmail}`}>
                     <Mail size={18} aria-hidden /> Nous écrire
                 </a>
                 <PageLink
@@ -155,15 +184,26 @@ export function ContactPage() {
                         <h2 data-reveal="left">Nos contacts par pays</h2>
                         <a
                             className="text-link"
-                            href={`mailto:${email}`}
+                            href={`mailto:${exportEmail}`}
                             data-reveal="right"
                         >
-                            {email}
+                            {exportEmail}
                         </a>
                     </div>
                     <div className="page-feature-grid contact-grid">
                         {contacts.map(
-                            ({ country, city, address, phone, tel }, index) => (
+                            (
+                                {
+                                    country,
+                                    location,
+                                    company,
+                                    address,
+                                    intro,
+                                    emails,
+                                    phone,
+                                },
+                                index,
+                            ) => (
                                 <article
                                     key={country}
                                     data-reveal={index % 2 ? 'right' : 'left'}
@@ -172,21 +212,33 @@ export function ContactPage() {
                                         <MapPin size={20} aria-hidden />
                                     </span>
                                     <h3>{country}</h3>
-                                    <p>OBCITO Énergies{city && ` · ${city}`}</p>
-                                    {address && <p>{address}</p>}
-                                    {phone ? (
-                                        <a href={`tel:${tel}`}>
-                                            <Phone size={15} aria-hidden />{' '}
-                                            {phone}
-                                        </a>
-                                    ) : (
-                                        <a
-                                            href={`mailto:${email}?subject=${encodeURIComponent('MÉTÉORE — ' + country)}`}
-                                        >
-                                            <Mail size={15} aria-hidden />{' '}
-                                            Contacter l’équipe
-                                        </a>
-                                    )}
+                                    {intro && <p>{intro}</p>}
+                                    <address className="contact-card-address">
+                                        <p className="contact-location">
+                                            {location}
+                                        </p>
+                                        {company && <p>{company}</p>}
+                                        {address && <p>{address}</p>}
+                                    </address>
+                                    <div className="contact-card-links">
+                                        {emails.map((email) => (
+                                            <a
+                                                key={email}
+                                                href={`mailto:${email}`}
+                                            >
+                                                <Mail size={15} aria-hidden />
+                                                <span>{email}</span>
+                                            </a>
+                                        ))}
+                                        {phone && (
+                                            <a
+                                                href={`tel:${phone.replaceAll(' ', '')}`}
+                                            >
+                                                <Phone size={15} aria-hidden />
+                                                <span>{phone}</span>
+                                            </a>
+                                        )}
+                                    </div>
                                 </article>
                             ),
                         )}
